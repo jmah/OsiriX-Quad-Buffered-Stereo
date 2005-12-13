@@ -1268,9 +1268,9 @@
 			isa = PBXGroup;
 			children = (
 				0ED1D44C094906CB0085FBBD /* Classes */,
+				0ED1D465094906E60085FBBD /* Other Sources */,
 				0EC884D00947B211006BFC6E /* OsiriX Headers */,
 				0EC884FE0947B3D3006BFC6E /* VTKHeaders */,
-				0ED1D465094906E60085FBBD /* Other Sources */,
 				0ED1D46D094907050085FBBD /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
