@@ -2682,15 +2682,11 @@
 		CE6A9A9108AC841300D0C1EE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Other Sources/Quad-Buffered Stereo_Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
-				LIBRARY_STYLE = Bundle;
+				INSTALL_PATH = "/Library/Application Support/OsiriX/Plugins";
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
@@ -2702,24 +2698,16 @@
 					"-Wno-unknown-pragmas",
 				);
 				WRAPPER_EXTENSION = plugin;
-				ZERO_LINK = NO;
 			};
 			name = Debug;
 		};
 		CE6A9A9208AC841300D0C1EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Other Sources/Quad-Buffered Stereo_Prefix.pch";
 				INFOPLIST_FILE = Resources/Info.plist;
-				LIBRARY_STYLE = Bundle;
+				INSTALL_PATH = "/Library/Application Support/OsiriX/Plugins";
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
@@ -2731,14 +2719,17 @@
 					"-Wno-unknown-pragmas",
 				);
 				WRAPPER_EXTENSION = plugin;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		CE6A9A9508AC841300D0C1EE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
@@ -2748,6 +2739,12 @@
 		CE6A9A9608AC841300D0C1EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
