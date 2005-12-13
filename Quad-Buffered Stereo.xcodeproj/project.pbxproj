@@ -23,7 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
-		014CEA420018CDE011CA2923 /* Development */ = {
+		014CEA420018CDE011CA2923 /* Debug */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -42,16 +42,16 @@
 				WRAPPER_EXTENSION = plugin;
 				ZERO_LINK = NO;
 			};
-			name = Development;
+			name = Debug;
 		};
-		014CEA430018CDE011CA2923 /* Deployment */ = {
+		014CEA430018CDE011CA2923 /* Release */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
 /* End PBXBuildStyle section */
 
@@ -2601,8 +2601,8 @@
 			buildSettings = {
 			};
 			buildStyles = (
-				014CEA420018CDE011CA2923 /* Development */,
-				014CEA430018CDE011CA2923 /* Deployment */,
+				014CEA420018CDE011CA2923 /* Debug */,
+				014CEA430018CDE011CA2923 /* Release */,
 			);
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -2679,7 +2679,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		CE6A9A9108AC841300D0C1EE /* Development */ = {
+		CE6A9A9108AC841300D0C1EE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -2704,9 +2704,9 @@
 				WRAPPER_EXTENSION = plugin;
 				ZERO_LINK = NO;
 			};
-			name = Development;
+			name = Debug;
 		};
-		CE6A9A9208AC841300D0C1EE /* Deployment */ = {
+		CE6A9A9208AC841300D0C1EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
@@ -2733,33 +2733,9 @@
 				WRAPPER_EXTENSION = plugin;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		CE6A9A9308AC841300D0C1EE /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Other Sources/Quad-Buffered Stereo_Prefix.pch";
-				INFOPLIST_FILE = Resources/Info.plist;
-				LIBRARY_STYLE = Bundle;
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = "Quad-Buffered Stereo";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = plugin;
-				ZERO_LINK = NO;
-			};
-			name = Default;
-		};
-		CE6A9A9508AC841300D0C1EE /* Development */ = {
+		CE6A9A9508AC841300D0C1EE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_MODEL_TUNING = G5;
@@ -2767,9 +2743,9 @@
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = Development;
+			name = Debug;
 		};
-		CE6A9A9608AC841300D0C1EE /* Deployment */ = {
+		CE6A9A9608AC841300D0C1EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_MODEL_TUNING = G5;
@@ -2777,17 +2753,7 @@
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = Deployment;
-		};
-		CE6A9A9708AC841300D0C1EE /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_MODEL_TUNING = G5;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Default;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -2795,22 +2761,20 @@
 		CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "Quad-Buffered Stereo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CE6A9A9108AC841300D0C1EE /* Development */,
-				CE6A9A9208AC841300D0C1EE /* Deployment */,
-				CE6A9A9308AC841300D0C1EE /* Default */,
+				CE6A9A9108AC841300D0C1EE /* Debug */,
+				CE6A9A9208AC841300D0C1EE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Debug;
 		};
 		CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "Quad-Buffered Stereo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CE6A9A9508AC841300D0C1EE /* Development */,
-				CE6A9A9608AC841300D0C1EE /* Deployment */,
-				CE6A9A9708AC841300D0C1EE /* Default */,
+				CE6A9A9508AC841300D0C1EE /* Debug */,
+				CE6A9A9608AC841300D0C1EE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
