@@ -1,0 +1,98 @@
+//
+//  QBSController.m
+//  Quad-Buffered Stereo
+//
+//  Created by Jonathon Mah on 2005-12-09.
+//  Copyright (c) 2005 Jonathon Mah, SAPAC. All rights reserved.
+//
+
+#import "QBSController.h"
+
+
+@interface QBSController (QBSPrivateMethods)
+
+- (void)quadBufferedAlertSheetDidDismiss:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+
+@end
+
+
+@implementation QBSController
+
+
+#pragma mark Convenience Methods
+
++ (id)sharedController
+{
+	static QBSController *sharedController = nil;
+	if (!sharedController)
+		sharedController = [[QBSController alloc] init];
+	return sharedController;
+}
+
+
+
+#pragma mark Utility Methods
+
+- (void)registerUserDefaults
+{
+	NSDictionary *regDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithUnsignedInt:QBSStereoTypeRedBlue], QBSStereoTypeKey,
+		[NSNumber numberWithBool:YES], QBSForceBlueLineSyncKey,
+		nil];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:regDefaults];
+}
+
+
+- (void)setUpScreenForStereo:(NSTimer *)timer // userInfo is an NSView
+{
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:QBSForceBlueLineSyncKey])
+	{
+		CGDirectDisplayID currDisplay = (CGDirectDisplayID)[[[[[[timer userInfo] window] screen] deviceDescription] objectForKey:@"NSScreenNumber"] pointerValue];
+		CGDisplayConfigRef confRef;
+		CGBeginDisplayConfiguration(&confRef);
+		CGConfigureDisplayStereoOperation(confRef, currDisplay, true, true);
+		CGCompleteDisplayConfiguration(confRef, kCGConfigureForAppOnly);
+	}
+}
+
+
+
+#pragma mark User Interface
+
+- (IBAction)showSettingsPanel:(id)sender
+{
+	if (!settingsPanel)
+	{
+		[NSBundle loadNibNamed:@"QBSSettings" owner:self];
+		[settingsPanel center];
+	}
+	[settingsPanel makeKeyAndOrderFront:self];
+}
+
+
+- (IBAction)beginQuadBufferedAlertSheet:(id)sender
+{
+	static NSBundle *myBundle = nil;
+	if (!myBundle)
+		myBundle = [NSBundle bundleForClass:[self class]];
+	NSBeginAlertSheet(NSLocalizedStringFromTableInBundle(@"Quad-Buffered Stereo Cannot Be Toggled", nil, myBundle, @"Quad-buffered alert sheet title"),
+	                  nil, // defaultButton: OK
+	                  nil, // alternateButton: none
+	                  NSLocalizedStringFromTableInBundle(@"Open Settings", nil, myBundle, @"Quad-buffered alert sheet open settings button title"),
+	                  [NSApp mainWindow], // docWindow
+	                  self, // modalDelegate
+	                  NULL, // didEndSelector
+	                  @selector(quadBufferedAlertSheetDidDismiss:returnCode:contextInfo:), //didDismissSelector
+	                  NULL, // contextInfo
+	                  NSLocalizedStringFromTableInBundle(@"Quad-buffered stereo cannot be toggled on and off whilst a 3D view is open. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when in a 2D view.", nil, myBundle, @"Quad-buffered alert sheet message"));
+}
+
+
+- (void)quadBufferedAlertSheetDidDismiss:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo // QBSController (QBSPrivateMethods)
+{
+	if (returnCode == NSAlertOtherReturn)
+		[self showSettingsPanel:nil];
+}
+
+
+@end

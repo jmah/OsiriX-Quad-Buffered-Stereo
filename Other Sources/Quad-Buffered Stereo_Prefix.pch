@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Quad-Buffered Stereo' target in the 'Quad-Buffered Stereo' project.
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
