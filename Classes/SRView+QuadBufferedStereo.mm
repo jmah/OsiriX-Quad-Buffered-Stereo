@@ -48,11 +48,16 @@
 				case QBSStereoTypeInterlaced:
 					if( [self renderWindow]->GetStereoRender() == false)
 					{
+						orientationWidget->Off();
+						
 						[self renderWindow]->StereoRenderOn();
 						[self renderWindow]->SetStereoTypeToInterlaced();
 					}
 					else
+					{
 						[self renderWindow]->StereoRenderOff();
+						orientationWidget->On();
+					}
 					
 					[self setNeedsDisplay:YES];
 					break;
