@@ -30,6 +30,7 @@ enum
 @class DCMView;
 @class DCMPix;
 @class StringTexture;
+@class DCMObject;
 
 @interface ROI : NSObject <NSCoding>
 {
@@ -73,6 +74,13 @@ enum
 	
 	StringTexture			*stringTex;
 	NSMutableDictionary		*stanStringAttrib;
+	
+	NSString *_roiSeriesInstanceUID;
+	NSString *_sopInstanceUID;
+	NSString *_referencedSOPInstanceUID;
+	NSString *_referencedSOPClassUID;
+	int _frameNumber;
+	
 }
 
 // Create a new ROI, needs the current pixel resolution and image origin
@@ -82,6 +90,17 @@ enum
 - (id) initWithTexture: (unsigned char*)tBuff  textWidth:(int)tWidth textHeight:(int)tHeight textName:(NSString*)tName
 			 positionX:(int)posX positionY:(int)posY
 			  spacingX:(float) ipixelSpacingx spacingY:(float) ipixelSpacingy imageOrigin:(NSPoint) iimageOrigin;
+
+/*
+ convert DICOM presentation state to ROI. 
+ Although the referenced values are in the presentation state. 
+ ROIs only point to a single image in OsiriX	
+*/
+
+- (id)initWithDICOMPresentationState:(DCMObject *)presentationState
+		referencedSOPInstanceUID:(NSString *)referencedSOPInstanceUID
+		referencedSOPClassUID:(NSString *)referencedSOPClassUID;
+									
 + (int)brushSize;
 + (int)eraserSize;
 + (void)setBrushSize:(int)newInt;
@@ -171,4 +190,18 @@ enum
 - (void) recompute;
 - (void) rotate: (float) angle :(NSPoint) center;
 - (void) resize: (float) factor :(NSPoint) center;
+
+
+- (NSString *)roiSeriesInstanceUID;
+- (NSString *)sopInstanceUID;
+- (NSString *)referencedSOPInstanceUID;
+- (NSString *)referencedSOPClassUID;
+- (int) frameNumber;
+- (void)setRoiSeriesInstanceUID:(NSString *)roiSeriesInstanceUID;
+- (void)setSopInstanceUID:(NSString *)sopInstanceUID;
+- (void)setReferencedSOPInstanceUID:(NSString *)referencedSOPInstanceUID;
+- (void)setReferencedSOPClassUID:(NSString *)referencedSOPClassUID;
+- (void)setFrameNumber: (int)frameNumber;
+
+
 @end

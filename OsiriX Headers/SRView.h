@@ -139,6 +139,7 @@ typedef char* vtkPolyDataNormals;
 
 @interface SRView : VTKView
 {
+	int							projectionMode;
     NSMutableArray				*blendingPixList;
     DCMPix						*blendingLastObject, *blendingFirstObject;
     float						*blendingData, blendingFactor;
@@ -149,6 +150,8 @@ typedef char* vtkPolyDataNormals;
 	vtkTextActor				*textX;
 	vtkTextActor				*oText[ 4];
 	
+	NSCursor						*cursor;
+	NSTimer						*mouseModifiers;
     NSMutableArray				*pixList;
     DCMPix						*firstObject;
     float						*data, *dataFRGB;
@@ -226,9 +229,9 @@ typedef char* vtkPolyDataNormals;
 -(short) setPixSource:(NSMutableArray*)pix :(float*) volumeData;
 -(void) dealloc;
 -(void) setBlendingPixSource:(ViewerController*) bC;
--(void) changeActor:(long) actor :(float) resolution :(float) transparency :(float) r :(float) g :(float) b :(float) isocontour;
+- (void) changeActor:(long) actor :(float) resolution :(float) transparency :(float) r :(float) g :(float) b :(float) isocontour :(BOOL) useDecimate :(float) decimateVal :(BOOL) useSmooth :(long) smoothVal;
 -(void) deleteActor:(long) actor;
--(void) BchangeActor:(long) actor :(float) resolution :(float) transparency :(float) r :(float) g :(float) b :(float) isocontour;
+-(void) BchangeActor:(long) actor :(float) resolution :(float) transparency :(float) r :(float) g :(float) b :(float) isocontour :(BOOL) useDecimate :(float) decimateVal :(BOOL) useSmooth :(long) smoothVal;
 -(void) BdeleteActor:(long) actor;
 -(IBAction) endQuicktimeSettings:(id) sender;
 -(IBAction) exportQuicktime :(id) sender;
@@ -245,6 +248,9 @@ typedef char* vtkPolyDataNormals;
 -(void) switchOrientationWidget:(id) sender;
 - (void) computeOrientationText;
 - (void) getOrientation: (float*) o;
+-(void) saView:(id) sender;
+
+-(IBAction) switchProjection:(id) sender;
 
 // 3D Points
 - (void) add3DPoint: (double) x : (double) y : (double) z : (float) radius : (float) r : (float) g : (float) b;
@@ -271,4 +277,6 @@ typedef char* vtkPolyDataNormals;
 - (IBAction) save3DPointsDefaultProperties: (id) sender;
 - (void) load3DPointsDefaultProperties;
 - (void) convert3Dto2Dpoint:(float*) pt3D :(float*) pt2D;
+
+-(void) setCursorForView: (long) tool;
 @end

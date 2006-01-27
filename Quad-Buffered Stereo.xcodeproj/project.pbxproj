@@ -11,13 +11,14 @@
 		0EC5013C09491EA800B45B6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0EC5013609491EA800B45B6A /* InfoPlist.strings */; };
 		0EC5013D09491EA800B45B6A /* QBSSettings.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0EC5013809491EA800B45B6A /* QBSSettings.nib */; };
 		0EC5013E09491EA800B45B6A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0EC5013A09491EA800B45B6A /* Localizable.strings */; };
+		0EC655A70987156F00EB7182 /* FlyThruController+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0EC655A50987156F00EB7182 /* FlyThruController+QuadBufferedStereo.mm */; };
+		0EC655CB0987169700EB7182 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EC655CA0987169700EB7182 /* QuickTime.framework */; };
+		0EC656B609873C0400EB7182 /* VTKView+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D458094906CB0085FBBD /* VTKView+QuadBufferedStereo.mm */; };
 		0ED1D45A094906CB0085FBBD /* MPRView+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D44E094906CB0085FBBD /* MPRView+QuadBufferedStereo.mm */; };
 		0ED1D45C094906CB0085FBBD /* NSOpenGLPixelFormat+QuadBufferedStereo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D450094906CB0085FBBD /* NSOpenGLPixelFormat+QuadBufferedStereo.m */; };
 		0ED1D45D094906CB0085FBBD /* QuadBufferedStereo.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ED1D451094906CB0085FBBD /* QuadBufferedStereo.h */; };
 		0ED1D45E094906CB0085FBBD /* QuadBufferedStereo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D452094906CB0085FBBD /* QuadBufferedStereo.m */; };
 		0ED1D460094906CB0085FBBD /* SRView+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D454094906CB0085FBBD /* SRView+QuadBufferedStereo.mm */; };
-		0ED1D462094906CB0085FBBD /* VRView+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D456094906CB0085FBBD /* VRView+QuadBufferedStereo.mm */; };
-		0ED1D464094906CB0085FBBD /* VTKView+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D458094906CB0085FBBD /* VTKView+QuadBufferedStereo.mm */; };
 		0ED1D4A3094909D00085FBBD /* Small SAPAC Logo No Text.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ED1D4A2094909D00085FBBD /* Small SAPAC Logo No Text.png */; };
 		0ED4DF2F0947F86600970BD5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -63,6 +64,15 @@
 		0EC5013709491EA800B45B6A /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0EC5013909491EA800B45B6A /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/QBSSettings.nib; sourceTree = "<group>"; };
 		0EC5013B09491EA800B45B6A /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		0EC655A50987156F00EB7182 /* FlyThruController+QuadBufferedStereo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "FlyThruController+QuadBufferedStereo.mm"; sourceTree = "<group>"; };
+		0EC655A60987156F00EB7182 /* FlyThruController+QuadBufferedStereo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FlyThruController+QuadBufferedStereo.h"; sourceTree = "<group>"; };
+		0EC655B90987164000EB7182 /* FlyThruController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyThruController.h; sourceTree = "<group>"; };
+		0EC655BA0987165300EB7182 /* FlyThruAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyThruAdapter.h; sourceTree = "<group>"; };
+		0EC655CA0987169700EB7182 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
+		0EC655D9098716A400EB7182 /* QuicktimeExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuicktimeExport.h; sourceTree = "<group>"; };
+		0EC656160987177400EB7182 /* Window3DController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Window3DController.h; sourceTree = "<group>"; };
+		0EC65622098717D900EB7182 /* FlyThru.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyThru.h; sourceTree = "<group>"; };
+		0EC65627098717E700EB7182 /* Interpolation3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interpolation3D.h; sourceTree = "<group>"; };
 		0EC884D10947B211006BFC6E /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		0EC884D20947B211006BFC6E /* DCMPix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMPix.h; sourceTree = "<group>"; };
 		0EC884D30947B211006BFC6E /* DCMView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMView.h; sourceTree = "<group>"; };
@@ -1258,6 +1268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0ED4DF2F0947F86600970BD5 /* Cocoa.framework in Frameworks */,
+				0EC655CB0987169700EB7182 /* QuickTime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1294,11 +1305,16 @@
 				0EC884D20947B211006BFC6E /* DCMPix.h */,
 				0EC884D30947B211006BFC6E /* DCMView.h */,
 				0EC884D40947B211006BFC6E /* dicomFile.h */,
+				0EC65622098717D900EB7182 /* FlyThru.h */,
+				0EC655BA0987165300EB7182 /* FlyThruAdapter.h */,
+				0EC655B90987164000EB7182 /* FlyThruController.h */,
+				0EC65627098717E700EB7182 /* Interpolation3D.h */,
 				0EC884D50947B211006BFC6E /* MPRView.h */,
 				0EC884D60947B211006BFC6E /* MyPoint.h */,
 				0EC884D70947B211006BFC6E /* PluginFilter.h */,
 				0EC884D80947B211006BFC6E /* Point3D.h */,
 				0EC88A4C0947B94F006BFC6E /* PreviewView.h */,
+				0EC655D9098716A400EB7182 /* QuicktimeExport.h */,
 				0EC884D90947B211006BFC6E /* ROI.h */,
 				0EC884DA0947B211006BFC6E /* Schedulable.h */,
 				0EC884DB0947B211006BFC6E /* Scheduler.h */,
@@ -1308,6 +1324,7 @@
 				0EC884DF0947B211006BFC6E /* VRView.h */,
 				0EC884E00947B211006BFC6E /* VTKView.h */,
 				0EC884E10947B211006BFC6E /* WaitRendering.h */,
+				0EC656160987177400EB7182 /* Window3DController.h */,
 			);
 			path = "OsiriX Headers";
 			sourceTree = "<group>";
@@ -2487,6 +2504,8 @@
 				0ED1D454094906CB0085FBBD /* SRView+QuadBufferedStereo.mm */,
 				0ED1D455094906CB0085FBBD /* VRView+QuadBufferedStereo.h */,
 				0ED1D456094906CB0085FBBD /* VRView+QuadBufferedStereo.mm */,
+				0EC655A60987156F00EB7182 /* FlyThruController+QuadBufferedStereo.h */,
+				0EC655A50987156F00EB7182 /* FlyThruController+QuadBufferedStereo.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -2516,6 +2535,7 @@
 			isa = PBXGroup;
 			children = (
 				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
+				0EC655CA0987169700EB7182 /* QuickTime.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -2643,9 +2663,9 @@
 				0ED1D45C094906CB0085FBBD /* NSOpenGLPixelFormat+QuadBufferedStereo.m in Sources */,
 				0ED1D45E094906CB0085FBBD /* QuadBufferedStereo.m in Sources */,
 				0ED1D460094906CB0085FBBD /* SRView+QuadBufferedStereo.mm in Sources */,
-				0ED1D462094906CB0085FBBD /* VRView+QuadBufferedStereo.mm in Sources */,
-				0ED1D464094906CB0085FBBD /* VTKView+QuadBufferedStereo.mm in Sources */,
 				0EC500CE0949185B00B45B6A /* QBSController.m in Sources */,
+				0EC655A70987156F00EB7182 /* FlyThruController+QuadBufferedStereo.mm in Sources */,
+				0EC656B609873C0400EB7182 /* VTKView+QuadBufferedStereo.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

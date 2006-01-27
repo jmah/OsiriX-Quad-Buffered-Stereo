@@ -23,52 +23,56 @@
 #include <OpenGL/glu.h>
 
 
-#define STAT_UPDATE                0.6f
-#define IMAGE_COUNT                1
-#define IMAGE_DEPTH                32
+#define STAT_UPDATE					0.6f
+#define IMAGE_COUNT					1
+#define IMAGE_DEPTH					32
 
+
+// Tools.
 
 enum
 {
-    tWL = 0,
-    tTranslate =1,
-    tZoom =2,
-    tRotate =3,
-    tNext =4,
-    tMesure =5,
-    tROI =6,
-	t3DRotate =7,
-	tCross = 8,
-	
-	// ROIs
-	tOval = 9,
-	tOPolygon = 10,
-	tCPolygon = 11,
-	tAngle = 12,
-	tText = 13,
-	tArrow = 14,
-	tPencil = 15,
-	
-	t3Dpoint = 16,
-	
-	t3DCut = 17,
-	
-	tCamera3D = 18,
-	
-	t2DPoint = 19,
-	
-	tPlain = 20
+    tWL							=	0,
+    tTranslate,
+    tZoom,
+    tRotate,
+    tNext,
+    tMesure,
+    tROI,
+	t3DRotate,
+	tCross,
+	tOval,
+	tOPolygon,
+	tCPolygon,
+	tAngle ,
+	tText,
+	tArrow,
+	tPencil,
+	t3Dpoint,
+	t3DCut,
+	tCamera3D,
+	t2DPoint,
+	tPlain
 };
+
+
+enum { annotNone = 0, annotGraphics, annotBase, annotFull };
+enum { barHide = 0, barOrigin, barFused, barBoth };
+
+
 
 @class DCMPix;
 @class DCMView;
 @class ROI;
+@class OrthogonalMPRController;
 
 @interface DCMView: NSOpenGLView
 {
 	int				_imageRows;
 	int				_imageColumns;
 	int				_tag;
+
+	BOOL			flippedData;
 	
 	int				YearOld;
 	
@@ -99,7 +103,8 @@ enum
 	NSMutableArray  *dcmRoiList, *curRoiList;
     DCMPix			*curDCM;
 	
-    
+    NSTimer			*mouseModifiers;
+	
     char            listType;
     
     short           curImage, startImage;
@@ -110,8 +115,8 @@ enum
 	NSDictionary	*localeDictionnary;
 
     NSPoint         start, originStart, originOffsetStart, originOffsetRegistrationStart, previous;
-    long            startWW, curWW;
-    long            startWL, curWL;
+    float			startWW, curWW;
+    float			startWL, curWL;
     NSSize          scaleStart, scaleInit;
     
 	BOOL			convolution;
@@ -148,9 +153,13 @@ enum
 	NSSize			previousViewSize;
 	
 	float			mouseXPos, mouseYPos;
-	long			pixelMouseValue;
+	float			pixelMouseValue;
 	long			pixelMouseValueR, pixelMouseValueG, pixelMouseValueB;
     
+	float			blendingMouseXPos, blendingMouseYPos;
+	float			blendingPixelMouseValue;
+	long			blendingPixelMouseValueR, blendingPixelMouseValueG, blendingPixelMouseValueB;
+	
     long imageWidth; // height of orginal image
     long imageHeight; // width of orginal image
     float imageAspect; // width / height or aspect ratio of orginal image
@@ -176,7 +185,11 @@ enum
 	BOOL isKeyView; //needed for Image View subclass
 	NSCursor *cursor;
 	BOOL cursorSet;
+	
+	BOOL	displaySUVValue;
 }
+-(BOOL) flippedData;
+-(void) setFlippedData:(BOOL) f;
  -(NSMutableArray*) dcmPixList;
 - (long) indexForPix: (long) pixIndex; // Return the index into fileList that coresponds to the index in pixList
 - (long) syncSeriesIndex;
@@ -195,7 +208,10 @@ enum
 -(void) setBlendingMode:(long) f;
 -(GLuint *) loadTextureIn:(GLuint *) texture :(BOOL) blending;
 - (void) setSubtraction:(long) imID :(NSPoint) offset;
-- (void) setYFlipped:(BOOL) v;
+- (BOOL)xFlipped;
+- (void)setXFlipped: (BOOL)v;
+- (BOOL)yFlipped;
+- (void)setYFlipped:(BOOL) v;
 - (BOOL) roiTool:(long) tool;
 - (void) sliderAction2DMPR:(id) sender;
 - (void) setStringID:(NSString*) str;
@@ -207,8 +223,8 @@ enum
 - (void) setMPRAngle: (float) vectorMPR;
 - (NSPoint) ConvertFromView2GL:(NSPoint) a;
 - (void) cross3D:(float*) x :(float*) y :(float*) z;
-- (void) setWLWW:(long) wl :(long) ww;
-- (void) getWLWW:(long*) wl :(long*) ww;
+- (void) setWLWW:(float) wl :(float) ww;
+- (void) getWLWW:(float*) wl :(float*) ww;
 - (void) setConv:(short*) matrix :(short) size :(short) norm;
 - (void) setCLUT:( unsigned char*) r :(unsigned char*) g :(unsigned char*) b;
 - (void) setCurrentTool:(short)i;
@@ -246,6 +262,8 @@ enum
 - (void) setOriginOffsetRegistration:(NSPoint) x;
 - (void) setBlending:(DCMView*) bV;
 - (float) pixelSpacing;
+- (float) pixelSpacingX;
+- (float) pixelSpacingY;
 - (void) scaleToFit;
 - (void) setBlendingFactor:(float) f;
 - (void) sliderAction:(id) sender;
@@ -263,8 +281,9 @@ enum
 -(void) doSyncronize:(NSNotification*)note;
 -(BOOL) volumicSeries;
 - (id)initWithFrame:(NSRect)frame imageRows:(int)rows  imageColumns:(int)columns;
-- (BOOL)hasSUV;
 - (float)getSUV;
+- (BOOL) displaySUVValue;
+- (void) displaySUVValue: (BOOL) v;
 - (IBAction) roiLoadFromXMLFiles: (id) sender;
 - (float)mouseXPos;
 - (float)mouseYPos;
@@ -274,7 +293,7 @@ enum
 - (void) setSyncro:(long) s;
 - (long) syncro;
 - (NSFont*)fontGL;
-
+- (void) setScaleValueCentered:(float) x;
 //notifications
 -(void) updateCurrentImage: (NSNotification*) note;
 -(void)updateImageTiling:(NSNotification *)note;
@@ -282,11 +301,9 @@ enum
 -(void) setRows:(int)rows columns:(int)columns;
 -(void)setTag:(int)aTag;
 -(int)tag;
--(long)curWW;
--(long)curWL;
+-(float)curWW;
+-(float)curWL;
 -(float)scaleValue;
--(BOOL)xFlipped;
--(BOOL)yFlipped;
 -(NSPoint)origin;
 - (int)rows;
 - (int)columns;
@@ -294,16 +311,18 @@ enum
 - (float)blendingFactor;
 - (float)blendingMode;
 - (NSCursor *)cursor;
-- (void)setCursor:(NSCursor *)aCursor;
 -(void) becomeMainWindow;
 - (BOOL)eraserFlag;
 - (void)setEraserFlag: (BOOL)aFlag;
 - (NSManagedObject *)imageObj;
 - (NSManagedObject *)seriesObj;
 - (void)updatePresentationStateFromSeries;
-- (void) setXFlipped:(BOOL) v;
 - (void) subDrawRect:(NSRect)aRect;
 - (IBAction)resetSeriesPresentationState:(id)sender;
 - (IBAction)resetImagePresentationState:(id)sender;
-
+- (void) setCursorForView: (long) tool;
+- (long) getTool: (NSEvent*) event;
+- (void)resizeWindowToScale:(float)resizeScale;
+- (float) getBlendedSUV;
+- (OrthogonalMPRController*) controller;
 @end

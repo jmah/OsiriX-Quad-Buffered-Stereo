@@ -12,6 +12,8 @@
 // NSUserDefaults keys
 #define QBSStereoTypeKey @"QBSStereoType"
 #define QBSForceBlueLineSyncKey @"QBSForceBlueLineSync"
+#define QBSExportQuickTimeInStereoKey @"QBSExportQuickTimeInStereo"
+#define QBSAskExportQuickTimeInStereoKey @"QBSAskExportQuickTimeInStereo"
 
 typedef enum _QBSStereoType {
 	QBSStereoTypeRedBlue = 0,
@@ -35,5 +37,6 @@ typedef enum _QBSStereoType {
 #pragma mark User Interface
 - (IBAction)showSettingsPanel:(id)sender;
 - (IBAction)beginQuadBufferedAlertSheet:(id)sender;
+- (IBAction)beginCannotExportStereoAlertSheet:(id)sender;
 
 @end

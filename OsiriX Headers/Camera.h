@@ -18,7 +18,7 @@
 #import "Point3D.h"
 
 @interface Camera : NSObject {
-	Point3D *position, *viewUp, *focalPoint;
+	Point3D *position, *viewUp, *focalPoint, *minCroppingPlanes, *maxCroppingPlanes;
 	float clippingRangeNear, clippingRangeFar, viewAngle, eyeAngle, parallelScale;
 	NSImage *previewImage;
 	float wl, ww;
@@ -45,6 +45,11 @@
 -(void) setWLWW: (float) newWl : (float) newWw;
 -(float) wl;
 -(float) ww;
+// cropping planes
+-(void) setMinCroppingPlanes: (Point3D*)p;
+-(Point3D*) minCroppingPlanes;
+-(void) setMaxCroppingPlanes: (Point3D*)p;
+-(Point3D*) maxCroppingPlanes;
 
 -(void) setPreviewImage: (NSImage*)im;
 -(NSImage*) previewImage;

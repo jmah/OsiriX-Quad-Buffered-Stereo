@@ -15,8 +15,7 @@
 
 - (void)initPlugin
 {
-	NSDictionary *regDefaults = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:QBSStereoTypeRedBlue] forKey:QBSStereoTypeKey];
-	[[NSUserDefaults standardUserDefaults] registerDefaults:regDefaults];
+	[[QBSController sharedController] registerUserDefaults];
 }
 
 

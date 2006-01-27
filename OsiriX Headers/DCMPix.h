@@ -45,8 +45,9 @@
     char                *baseAddr;
     
     long                height, width, rowBytes;
-    long                ww, wl, imID, imTot;
-	long				fullww, fullwl;
+    float				ww, wl;
+	long				imID, imTot;
+	float				fullww, fullwl;
     float               sliceInterval, pixelSpacingX, pixelSpacingY, sliceLocation, sliceThickness, pixelRatio;
     
 	float				originX, originY, originZ;
@@ -69,10 +70,10 @@
 	short				normalization;
 	short				kernel[25];
 	
-	long				savedWL, savedWW;
+	float				savedWL, savedWW;
 	
 	short				stack;
-	short				stackMode, pixPos;
+	short				stackMode, pixPos, stackDirection;
 	NSArray				*pixArray;
 	
 	volatile BOOL		checking;
@@ -88,6 +89,7 @@
 	
 	// DICOM params needed for SUV calculations
 	
+	BOOL				hasSUV, SUVConverted;
 	NSString			*units, *decayCorrection;
 	float				radionuclideTotalDose, patientsWeight;
 	
@@ -107,8 +109,8 @@
 - (long) pheight;
 
 // WL & WW
-- (long) ww;
-- (long) wl;
+- (float) ww;
+- (float) wl;
 
 // Compute ROI data
 - (void) computeROI:(ROI*) roi :(float *)mean :(float *)total :(float *)dev :(float *)min :(float *)max;
@@ -163,7 +165,6 @@
 - (void) setID :(long) i;
 -(long) frameNo;
 -(void) setFrameNo:(long) f;
-
 - (BOOL) thickSlabMode;
 - (void) ConvertToBW:(long) mode;
 - (void) ConvertToRGB:(long) mode :(long) cwl :(long) cww;
@@ -185,26 +186,26 @@
 - (id) myinit:(NSString*) s :(long) pos :(long) tot :(float*) ptr :(long) f :(long) ss isBonjour:(BOOL) hello imageObj: (NSManagedObject*) iO;
 - (id) initwithdata :(float*) im :(short) pixelSize :(long) xDim :(long) yDim :(float) xSpace :(float) ySpace :(float) oX :(float) oY :(float) oZ;
 - (id) initwithdata :(float*) im :(short) pixelSize :(long) xDim :(long) yDim :(float) xSpace :(float) ySpace :(float) oX :(float) oY :(float) oZ :(BOOL) volSize;
-- (xNSImage*) computeWImage:(BOOL)icon :(long)ww :(long)wl;
-- (void) changeWLWW:(long)newWL :(long)newWW;
+- (xNSImage*) computeWImage: (BOOL) smallIcon :(float)newWW :(float)newWL;
+- (void) changeWLWW:(float)newWL :(float)newWW;
 - (xNSImage*) getImage;
 - (char*) baseAddr;
 - (void) setBaseAddr :( char*) ptr;
 - (void) dealloc;
 - (short*) oImage;
 //- (void) killImage;
-- (void) checkImageAvailble:(long)newWW :(long)newWL;
+- (void) checkImageAvailble:(float)newWW :(float)newWL;
 -(long) rowBytes;
 -(void) setRowBytes:(long) rb;
--(long) fullww;
--(long) fullwl;
+-(float) fullww;
+-(float) fullwl;
 -(float) slope;
 -(float) offset;
 -(long) serieNo;
 -(long) Tot;
 -(void) setTot: (long) tot;
 -(void) CheckLoad;
--(void) setFusion:(short) mode :(short) stacks;
+-(void) setFusion:(short) m :(short) s :(short) direction;
 -(short) stack;
 -(NSString*) sourceFile;
 -(void) setUpdateToApply;
@@ -217,12 +218,21 @@
 -(void) setFixed8bitsWLWW:(BOOL) f;
 -(BOOL) generated;
 // Accessor methods needed for SUV calculations
--(float)	 patientsWeight;
+
+-(float) patientsWeight;
+-(void) setPatientsWeight : (float) v;
+
+-(float) radionuclideTotalDose;
+-(void) setRadionuclideTotalDose : (float) v;
+
+-(void) setSUVConverted : (BOOL) v;
+- (BOOL) SUVConverted;
+
 -(NSString*) units;
 -(NSString*) decayCorrection;
--(float) radionuclideTotalDose;
 //Database links
 - (NSManagedObject *)imageObj;
 - (NSManagedObject *)seriesObj;
-
+- (void) checkSUV;
+- (BOOL) hasSUV;
 @end

@@ -10,6 +10,7 @@
 #import "NSOpenGLPixelFormat+QuadBufferedStereo.h"
 #import "QBSSwizzleMethod.h"
 #import "QBSController.h"
+#import "VRView.h"
 
 #define id Id
 #include "vtkInteractorStyleTrackballCamera.h"
@@ -27,6 +28,9 @@
 
 - (id)QBS_initWithFrame:(NSRect)frame // Will be swizzled for -initWithFrame:
 {
+	if ([self isKindOfClass:[VRView class]])
+		return [self QBS_initWithFrame:frame];
+	
 	switch ([[NSUserDefaults standardUserDefaults] integerForKey:QBSStereoTypeKey])
 	{
 		case QBSStereoTypeQuadBuffered:

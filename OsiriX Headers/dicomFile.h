@@ -45,6 +45,7 @@
 + (BOOL) isTiffFile:(NSString *) file;
 + (BOOL) isFVTiffFile:(NSString *) file;
 + (BOOL) isDICOMFile:(NSString *) file;
++ (void) setDefaults;
 
 - (long) NoOfFrames;
 - (long) getWidth;

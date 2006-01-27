@@ -37,9 +37,12 @@
 
 	IBOutlet NSSplitView	*splitView;
 	IBOutlet NSMatrix		*previewMatrix;
-
+	BOOL					matrixPreviewBuilt;
+	
     IBOutlet NSWindow       *quicktimeWindow;
 	IBOutlet NSMatrix		*quicktimeMode;
+	IBOutlet NSSlider		*quicktimeInterval, *quicktimeFrom, *quicktimeTo;
+	IBOutlet NSBox			*quicktimeBox;
 	
 	DCMView					*imageView;
     IBOutlet NSSlider       *slider, *speedSlider;
@@ -60,8 +63,9 @@
 	IBOutlet NSPopUpButton  *OpacityPopup;
 	
 			 NSPoint		subOffset;
-			 long			subtractedImage, wlBeforeSubtract, speedometer;
-	
+			 long			subtractedImage, speedometer;
+			 float			wlBeforeSubtract;
+			 
 	IBOutlet NSView			*StatusView;
 	IBOutlet NSButton		*CommentsField;
 	IBOutlet NSPopUpButton	*StatusPopup;
@@ -124,6 +128,15 @@
 
 	IBOutlet NSWindow       *dcmExportWindow;
 	IBOutlet NSMatrix		*dcmSelection, *dcmFormat;
+	IBOutlet NSSlider		*dcmInterval, *dcmFrom, *dcmTo;
+	IBOutlet NSBox			*dcmBox;
+	
+	IBOutlet NSWindow       *imageExportWindow;
+	IBOutlet NSMatrix		*imageSelection, *imageFormat;
+	
+	IBOutlet NSWindow		*displaySUVWindow;
+	IBOutlet NSForm			*suvForm;
+	IBOutlet NSMatrix		*suvConversion;
 	
 	IBOutlet NSWindow       *addOpacityWindow;
 	IBOutlet NSTextField    *OpacityName;
@@ -138,6 +151,10 @@
 	IBOutlet NSSlider       *blendingSlider;
 	ViewerController		*blendingController;
 	
+	IBOutlet NSTextField    *roiRenameName;
+	IBOutlet NSMatrix		*roiRenameMatrix;
+	IBOutlet NSWindow		*roiRenameWindow;
+	
 	NSString				*curConvMenu, *curWLWWMenu, *curCLUTMenu, *curOpacityMenu;
 	
 	IBOutlet NSTextField    *stacksFusion;
@@ -146,13 +163,13 @@
 	
 	IBOutlet NSMatrix		*buttonToolMatrix;
 	
-	NSArray					*fileList[50];
-    NSMutableArray          *pixList[50], *roiList[50];
-	NSData					*volumeData[50];
+	NSMutableArray			*fileList[200];
+    NSMutableArray          *pixList[200], *roiList[200];
+	NSData					*volumeData[200];
 	short					curMovieIndex, maxMovieIndex;
     NSToolbar               *toolbar;
 	
-	float					direction, loadingPercentage;
+	float					direction, loadingPercentage, maxValueOfSeries;
     
 	volatile BOOL			ThreadLoadImage, stopThreadLoadImage, loadingPause;
     BOOL                    FullScreenOn;
@@ -171,10 +188,12 @@
 	CurvedMPR				*curvedController;
 	
 	DICOMExport				*exportDCM;
+	
+	BOOL					windowWillClose;
 }
 
 // Create a new 2D Viewer
-- (ViewerController *) newWindow:(NSMutableArray*)pixList :(NSArray*)fileList :(NSData*) volumeData;
+- (ViewerController *) newWindow:(NSMutableArray*)pixList :(NSMutableArray*)fileList :(NSData*) volumeData;
 
 // Return the 'dragged' window, the destination window is contained in the 'viewerController' object of the 'PluginFilter' object
 -(ViewerController*) blendedWindow;
@@ -205,7 +224,7 @@
 - (NSMutableArray*) pixList: (long) i;
 
 // Return the array of DicomFile objects
-- (NSArray*) fileList;
+- (NSMutableArray*) fileList;
 
 // Return the array of ROI objects
 - (NSMutableArray*) roiList;
@@ -245,10 +264,10 @@
 - (id) findPlayStopButton;
 - (BOOL) FullScreenON;
 - (void) setROITool:(id) sender;
-- (void) changeImageData:(NSMutableArray*)f :(NSArray*)d :(NSData*) v :(BOOL) applyTransition;
+- (void) changeImageData:(NSMutableArray*)f :(NSMutableArray*)d :(NSData*) v :(BOOL) applyTransition;
 - (IBAction) loadSerie:(id) sender;
 - (IBAction) loadPatient:(id) sender;
-- (void) offFullscren;
+- (void) offFullScreen;
 - (float) frame4DRate;
 - (long) maxMovieIndex;
 - (NSSlider*) moviePosSlider;
@@ -265,9 +284,9 @@
 - (IBAction) endQuicktime:(id) sender;
 - (void) setDefaultTool:(id) sender;
 - (OSErr)getFSRefAtPath:(NSString*)sourceItem ref:(FSRef*)sourceRef;
-- (id) viewCinit:(NSMutableArray*)f :(NSArray*) d :(NSData*) v;
+- (id) viewCinit:(NSMutableArray*)f :(NSMutableArray*) d :(NSData*) v;
 - (id) initWithWindowNibName:(NSString *)nibName :(NSMutableArray *)f :(NSArray *)d :(NSData *) v;
-- (void) setPixelList:(NSMutableArray*)f fileList:(NSArray *)d volumeData:(NSData *) v;
+- (void) setPixelList:(NSMutableArray*)f fileList:(NSMutableArray *)d volumeData:(NSData *) v;
 - (void) speedSliderAction:(id) sender;
 - (void) setupToolbar;
 - (void) PlayStop:(id) sender;
@@ -280,13 +299,15 @@
 - (void) setCurWLWWMenu:(NSString*)s ;
 - (BOOL) is2DViewer;
 - (NSString*) curCLUTMenu;
+- (NSString*) curWLWWMenu;
+- (BOOL) windowWillClose;
 - (void) ApplyCLUTString:(NSString*) str;
 - (NSSlider*) blendingSlider;
 - (void) blendingSlider:(id) sender;
 - (void) blendingMode:(id) sender;
 - (ViewerController*) blendingController;
 - (NSString*) modality;
-- (void) addMovieSerie:(NSMutableArray*)f :(NSArray*)d :(NSData*) v;
+- (void) addMovieSerie:(NSMutableArray*)f :(NSMutableArray*)d :(NSData*) v;
 - (void) startLoadImageThread;
 - (void) moviePosSliderAction:(id) sender;
 - (void) movieRateSliderAction:(id) sender;
@@ -306,6 +327,7 @@
 - (IBAction) VRViewer:(id) sender;
 - (IBAction) MPR2DViewer:(id) sender;
 - (IBAction) orthogonalMPRViewer:(id) sender;
+- (IBAction) endoscopyViewer:(id) sender;
 - (IBAction) CurvedMPR:(id) sender;
 //- (IBAction) MIPViewer:(id) sender;
 - (IBAction) SRViewer:(id) sender;
@@ -341,4 +363,12 @@
 - (void) buildMatrixPreview;
 - (void) matrixPreviewSelectCurrentSeries;
 - (void) autoHideMatrix;
+- (void) exportQuicktimeIn:(long) dimension :(long) from :(long) to :(long) interval;
+- (IBAction) endExportImage: (id) sender;
+- (float) maxValueOfSeries;
+- (IBAction) setCurrentPosition:(id) sender;
+- (IBAction) setCurrentdcmExport:(id) sender;
+- (IBAction) endDisplaySUV:(id) sender;
+- (IBAction) endRoiRename:(id) sender;
+- (IBAction) roiRename:(id) sender;
 @end

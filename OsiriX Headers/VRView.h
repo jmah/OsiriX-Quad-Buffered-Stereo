@@ -139,6 +139,7 @@ typedef char* vtkMyCallbackVR;
 
 @class DICOMExport;
 @class Camera;
+@class VRController;
 
 @interface VRView : VTKView <Schedulable>
 {
@@ -147,14 +148,13 @@ typedef char* vtkMyCallbackVR;
     DCMPix						*blendingFirstObject;
     float						*blendingData, blendingFactor;
 	ViewerController			*blendingController;
-//	char						*blendingData8;
-//	vImage_Buffer				blendingSrcf, blendingDst8;
+	char						*blendingData8;
+	vImage_Buffer				blendingSrcf, blendingDst8;
 	float						blendingWl, blendingWw;
 	vtkImageImport				*blendingReader;
 	
 	vtkFixedPointVolumeRayCastMapper		*blendingVolumeMapper;
 	vtkVolumeTextureMapper3D	*blendingTextureMapper;
-//	vtkVolumeShearWarpMapper	*blendingShearWarpMapper;
 	
 	vtkVolume					*blendingVolume;
 	vtkVolumeProperty			*blendingVolumeProperty;
@@ -173,6 +173,7 @@ typedef char* vtkMyCallbackVR;
 	IBOutlet NSWindow			*exportDCMWindow;
 	IBOutlet NSSlider			*dcmframesSlider;
 	IBOutlet NSMatrix			*dcmExportMode, *dcmquality, *dcmrotation, *dcmorientation;
+	IBOutlet NSBox				*dcmBox;
 
 	IBOutlet NSWindow       *export3DVRWindow;
 	IBOutlet NSMatrix		*VRFrames;
@@ -186,13 +187,16 @@ typedef char* vtkMyCallbackVR;
 	float					rotationValue, factor;
 	long					rotationOrientation;
 	
+	NSTimer					*mouseModifiers;
 	NSArray					*currentOpacityArray;
     NSMutableArray			*pixList;
     DCMPix					*firstObject;
     float					*data;
-//	unsigned char			*dataFRGB;
-//	char					*data8;
-//	vImage_Buffer			srcf, dst8;
+
+	unsigned char			*dataFRGB;
+	char					*data8;
+	vImage_Buffer			srcf, dst8;
+
     short					currentTool;
 	float					wl, ww;
 	float					LOD;
@@ -200,6 +204,8 @@ typedef char* vtkMyCallbackVR;
 	float					blendingcosines[ 9];
 	double					table[256][3];
 	double					alpha[ 256];
+
+	NSCursor				*cursor;
 	
     vtkRenderer				*aRenderer;
     vtkCamera				*aCamera;
@@ -216,12 +222,13 @@ typedef char* vtkMyCallbackVR;
 	// MAPPERS
 	
 	vtkFixedPointVolumeRayCastMapper			*volumeMapper;
-	vtkVolumeTextureMapper2D		*textureMapper;
+	vtkVolumeTextureMapper3D		*textureMapper;
 	
 	vtkVolume					*volume;
 	vtkVolumeProperty			*volumeProperty;
 	vtkColorTransferFunction	*colorTransferFunction;
 	vtkTextActor				*textWLWW, *textX;
+	BOOL						isViewportResizable;
 	vtkTextActor				*oText[ 4];
 	char						WLWWString[ 200];
 	vtkImageImport				*reader;
@@ -229,7 +236,7 @@ typedef char* vtkMyCallbackVR;
 	vtkPiecewiseFunction		*opacityTransferFunction;
 	
 	vtkColorTransferFunction	*red, *green, *blue;
-	BOOL						noWaitDialog, isRGB, ROIUPDATE;
+	BOOL						noWaitDialog, isRGB, isBlendingRGB, ROIUPDATE;
 	WaitRendering				*splash;
 	
 	double						camPosition[ 3], camFocal[ 3];
@@ -248,7 +255,25 @@ typedef char* vtkMyCallbackVR;
 	BOOL						clamping;
 	
 	DICOMExport					*exportDCM;
+	
+	NSMutableArray				*point3DActorArray;
+	NSMutableArray				*point3DPositionsArray;
+	NSMutableArray				*point3DRadiusArray;
+	NSMutableArray				*point3DColorsArray;
+	BOOL						display3DPoints;
+	IBOutlet NSPanel			*point3DInfoPanel;
+	IBOutlet NSSlider			*point3DRadiusSlider;
+	IBOutlet NSColorWell		*point3DColorWell;
+	IBOutlet NSButton			*point3DPropagateToAll, *point3DSetDefault;
+	IBOutlet VRController		*controller;
+	float						point3DDefaultRadius, point3DDefaultColorRed, point3DDefaultColorGreen, point3DDefaultColorBlue, point3DDefaultColorAlpha;
 }
+
++ (BOOL) getCroppingBox:(double*) a :(vtkVolume *) volume :(vtkBoxWidget*) croppingBox;
++ (void) setCroppingBox:(double*) a :(vtkVolume *) volume;
+
+- (void) renderImageWithBestQuality: (BOOL) best waitDialog: (BOOL) wait;
+- (void) endRenderImageWithBestQuality;
 
 - (void) exportDICOMFile:(id) sender;
 -(unsigned char*) getRawPixels:(long*) width :(long*) height :(long*) spp :(long*) bpp :(BOOL) screenCapture :(BOOL) force8bits;
@@ -258,12 +283,14 @@ typedef char* vtkMyCallbackVR;
 - (void) getShadingValues:(float*) ambient :(float*) diffuse :(float*) specular :(float*) specularpower;
 - (void) setShadingValues:(float) ambient :(float) diffuse :(float) specular :(float) specularpower;
 -(void) movieChangeSource:(float*) volumeData;
+-(void) movieChangeSource:(float*) volumeData showWait :(BOOL) showWait;
 -(void) movieBlendingChangeSource:(long) index;
 -(void) setBlendingWLWW:(float) iwl :(float) iww;
 -(void) setBlendingCLUT:( unsigned char*) r : (unsigned char*) g : (unsigned char*) b;
 -(void) setBlendingFactor:(float) a;
 -(NSDate*) startRenderingTime;
 -(void) newStartRenderingTime;
+-(void) deleteStartRenderingTime;
 -(void) setOpacity:(NSArray*) array;
 -(void) runRendering;
 -(void) startRendering;
@@ -291,6 +318,7 @@ typedef char* vtkMyCallbackVR;
 -(long) shading;
 - (void) setEngine: (long) engineID;
 -(IBAction) switchProjection:(id) sender;
+- (void) setProjectionMode: (int) mode;
 - (IBAction) resetImage:(id) sender;
 -(void) saView:(id) sender;
 - (IBAction)setRenderMode:(id)sender;
@@ -304,8 +332,53 @@ typedef char* vtkMyCallbackVR;
 -(void) switchOrientationWidget:(id) sender;
 - (void) computeOrientationText;
 - (void) getOrientation: (float*) o;
-
+-(void) bestRendering:(id) sender;
+- (void) setMode: (long) modeID;
 -(void)resizeWindowToScale:(float)resizeScale;
 - (IBAction)resizeWindow:(id)sender;
 - (float) getResolution;
+
+- (BOOL) isViewportResizable;
+- (void) setViewportResizable: (BOOL) boo;
+
+// 3D Points
+- (void) add3DPoint: (double) x : (double) y : (double) z : (float) radius : (float) r : (float) g : (float) b;
+- (void) add3DPoint: (double) x : (double) y : (double) z;
+- (void) add3DPointActor: (vtkActor*) actor;
+- (void) addRandomPoints: (int) n : (int) r;
+- (void) throw3DPointOnSurface: (double) x : (double) y;
+- (void) setDisplay3DPoints: (BOOL) on;
+- (void) toggleDisplay3DPoints;
+- (BOOL) isAny3DPointSelected;
+- (unsigned int) selected3DPointIndex;
+- (void) unselectAllActors;
+- (void) remove3DPointAtIndex: (unsigned int) index;
+- (void) removeSelected3DPoint;
+- (IBAction) IBSetSelected3DPointColor: (id) sender;
+- (IBAction) IBSetSelected3DPointRadius: (id) sender;
+- (IBAction) IBPropagate3DPointsSettings: (id) sender;
+- (void) setSelected3DPointColor: (NSColor*) color;
+- (void) setAll3DPointsColor: (NSColor*) color;
+- (void) set3DPointAtIndex:(unsigned int) index Color: (NSColor*) color;
+- (void) setSelected3DPointRadius: (float) radius;
+- (void) setAll3DPointsRadius: (float) radius;
+- (void) set3DPointAtIndex:(unsigned int) index Radius: (float) radius;
+- (IBAction) save3DPointsDefaultProperties: (id) sender;
+- (void) load3DPointsDefaultProperties;
+- (void) convert3Dto2Dpoint:(float*) pt3D :(float*) pt2D;
+- (IBAction) setCurrentdcmExport:(id) sender;
+- (IBAction) switchToSeriesRadio:(id) sender;
+
+- (void) setViewportResizable: (BOOL) boo;
+
+- (float) factor;
+
+// export
+- (void) sendMail:(id) sender;
+- (void) exportJPEG:(id) sender;
+- (void) export2iPhoto:(id) sender;
+- (void) exportTIFF:(id) sender;
+
+// cursors
+-(void) setCursorForView: (long) tool;
 @end

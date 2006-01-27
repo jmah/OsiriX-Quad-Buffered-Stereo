@@ -38,6 +38,8 @@
 	NSDictionary *regDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 		[NSNumber numberWithUnsignedInt:QBSStereoTypeRedBlue], QBSStereoTypeKey,
 		[NSNumber numberWithBool:YES], QBSForceBlueLineSyncKey,
+		[NSNumber numberWithBool:NO], QBSExportQuickTimeInStereoKey,
+		[NSNumber numberWithBool:YES], QBSAskExportQuickTimeInStereoKey,
 		nil];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:regDefaults];
 }
@@ -77,8 +79,8 @@
 		myBundle = [NSBundle bundleForClass:[self class]];
 	NSBeginAlertSheet(NSLocalizedStringFromTableInBundle(@"Quad-Buffered Stereo Cannot Be Toggled", nil, myBundle, @"Quad-buffered alert sheet title"),
 	                  nil, // defaultButton: OK
-	                  nil, // alternateButton: none
 	                  NSLocalizedStringFromTableInBundle(@"Open Settings", nil, myBundle, @"Quad-buffered alert sheet open settings button title"),
+	                  nil, // otherButton: none
 	                  [NSApp mainWindow], // docWindow
 	                  self, // modalDelegate
 	                  NULL, // didEndSelector
@@ -88,9 +90,27 @@
 }
 
 
+- (IBAction)beginCannotExportStereoAlertSheet:(id)sender
+{
+	static NSBundle *myBundle = nil;
+	if (!myBundle)
+		myBundle = [NSBundle bundleForClass:[self class]];
+	NSBeginAlertSheet(NSLocalizedStringFromTableInBundle(@"Cannot Create Stereo QuickTime Movie", nil, myBundle, @"Cannot export stereo alert sheet title"),
+	                  nil, // defaultButton: OK
+	                  NSLocalizedStringFromTableInBundle(@"Open Settings", nil, myBundle, @"Cannot export stereo alert sheet open settings button title"),
+	                  nil, // otherButton: none
+	                  [NSApp mainWindow], // docWindow
+	                  self, // modalDelegate
+	                  NULL, // didEndSelector
+	                  @selector(quadBufferedAlertSheetDidDismiss:returnCode:contextInfo:), //didDismissSelector
+	                  NULL, // contextInfo
+	                  NSLocalizedStringFromTableInBundle(@"A stereo QuickTime movie cannot be created when the 3D view is using quad-buffered stereo. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when in a 2D view.", nil, myBundle, @"Cannot export stereo alert sheet message"));
+}
+
+
 - (void)quadBufferedAlertSheetDidDismiss:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo // QBSController (QBSPrivateMethods)
 {
-	if (returnCode == NSAlertOtherReturn)
+	if (returnCode == NSAlertAlternateReturn)
 		[self showSettingsPanel:nil];
 }
 

@@ -34,9 +34,15 @@
 // This function is called to apply your plugin
 - (long) filterImage: (NSString*) menuName;
 
+// This function is the entry point of Pre-Process plugins
+- (long) processFiles: (NSArray*) files;
+
 // This function is called at the OsiriX startup, if you need to do some memory allocation, etc.
 - (void) initPlugin;
 
+// Opportunity for plugins to make Menu changes if necessary
+
+- (void)setMenus;
 
 // UTILITY FUNCTIONS - Defined in the PluginFilter.m file
 
