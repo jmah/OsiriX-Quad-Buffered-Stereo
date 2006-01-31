@@ -12,14 +12,28 @@
 #import "VTKView.h"
 
 
+// Suppress warnings
+@interface VTKView (QBSStereoCapture)
+
+#pragma mark Image Capture
+- (void)QBS_setImageCaptureBufferToLeft;
+- (void)QBS_setImageCaptureBufferToRight;
+
+@end
+
+
 @implementation FlyThruController (QuadBufferedStereo)
 
+#pragma mark Initialization and Deallocation
 
 + (void)load
 {
 	QBSSwizzleInstanceMethod([self class], @selector(flyThruQuicktimeExport:), @selector(QBS_flyThruQuicktimeExport:));
 }
 
+
+
+#pragma mark QuickTime Export
 
 - (IBAction)QBS_flyThruQuicktimeExport:(id)sender // Will be swizzled for -flyThruQuicktimeExport:
 {

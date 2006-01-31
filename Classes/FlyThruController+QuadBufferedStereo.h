@@ -12,6 +12,7 @@
 
 @interface FlyThruController (QuadBufferedStereo)
 
+#pragma mark QuickTime Export
 - (IBAction)QBS_flyThruQuicktimeExport:(id)sender; // Will be swizzled for -flyThruQuicktimeExport:
 - (IBAction)QBS_flyThruQuicktimeExportStereo:(id)sender;
 - (void)QBS_flyThruAskQuicktimeExportStereoAlertDidEnd:(NSWindow *)alertSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
