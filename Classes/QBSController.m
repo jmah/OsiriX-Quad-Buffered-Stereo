@@ -84,7 +84,7 @@
 	                  NULL, // didEndSelector
 	                  @selector(quadBufferedAlertSheetDidDismiss:returnCode:contextInfo:), //didDismissSelector
 	                  NULL, // contextInfo
-	                  NSLocalizedStringFromTableInBundle(@"Quad-buffered stereo cannot be switched on and off whilst a 3D view is open. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when in a 2D view.", nil, myBundle, @"Quad-buffered alert sheet message"));
+	                  NSLocalizedStringFromTableInBundle(@"Quad-buffered stereo cannot be switched on and off whilst a 3D view is open. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when viewing an image series.", nil, myBundle, @"Quad-buffered alert sheet message"));
 }
 
 
