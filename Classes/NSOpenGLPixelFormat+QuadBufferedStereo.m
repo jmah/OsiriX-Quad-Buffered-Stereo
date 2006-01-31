@@ -25,7 +25,7 @@ static BOOL forceStereo = NO;
 
 - (id)QBS_initWithAttributes:(NSOpenGLPixelFormatAttribute *)attrs // Will be swizzled for -initWithAttributes:
 {
-	id result;
+	id result = nil;
 	
 	if (forceStereo)
 	{
@@ -47,6 +47,11 @@ static BOOL forceStereo = NO;
 		while (*remainingNewAttrs++ = *remainingAttrs++);
 		
 		result = [self QBS_initWithAttributes:newAttrs];
+		if (!result)
+		{
+			NSLog(@"Quad-Buffered Stereo: Couldn't acquire a stereo pixel format; falling back to mono.");
+			result = [self QBS_initWithAttributes:attrs];
+		}
 		
 		free(newAttrs);
 	}
