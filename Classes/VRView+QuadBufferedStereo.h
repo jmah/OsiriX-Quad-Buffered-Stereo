@@ -12,6 +12,7 @@
 
 @interface VRView (QuadBufferedStereo)
 
+#pragma mark Stereo
 - (IBAction)SwitchStereoMode:(id)sender; // Override VRView
 
 @end

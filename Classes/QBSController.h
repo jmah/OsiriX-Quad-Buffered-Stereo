@@ -27,6 +27,7 @@ typedef enum _QBSStereoType {
 	IBOutlet NSPanel *settingsPanel;
 }
 
+
 #pragma mark Convenience Methods
 + (id)sharedController;
 
@@ -37,6 +38,5 @@ typedef enum _QBSStereoType {
 #pragma mark User Interface
 - (IBAction)showSettingsPanel:(id)sender;
 - (IBAction)beginQuadBufferedAlertSheet:(id)sender;
-- (IBAction)beginCannotExportStereoAlertSheet:(id)sender;
 
 @end

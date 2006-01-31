@@ -15,16 +15,11 @@ static BOOL forceStereo = NO;
 
 @implementation NSOpenGLPixelFormat (QuadBufferedStereo)
 
+#pragma mark Initialization and Deallocation
 
 + (void)load
 {
 	QBSSwizzleInstanceMethod([self class], @selector(initWithAttributes:), @selector(QBS_initWithAttributes:));
-}
-
-
-+ (void)QBS_forceStereo:(BOOL)stereo
-{
-	forceStereo = stereo;
 }
 
 
@@ -59,6 +54,15 @@ static BOOL forceStereo = NO;
 		result = [self QBS_initWithAttributes:attrs];
 	
 	return result;
+}
+
+
+
+#pragma mark Stereo
+
++ (void)QBS_forceStereo:(BOOL)stereo
+{
+	forceStereo = stereo;
 }
 
 

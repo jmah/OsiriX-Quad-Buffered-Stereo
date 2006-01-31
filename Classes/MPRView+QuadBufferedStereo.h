@@ -12,6 +12,7 @@
 
 @interface MPRView (QuadBufferedStereo)
 
+#pragma mark Stereo
 - (IBAction)SwitchStereoMode:(id)sender; // Override MPRView
 
 @end

@@ -7,11 +7,22 @@
 //
 
 #import "MPRView+QuadBufferedStereo.h"
+#import "VTKView+QuadBufferedStereo.h"
 #import "QBSController.h"
 
 
 @implementation MPRView (QuadBufferedStereo)
 
+#pragma mark Initialization and Deallocation
+
++ (void)initialize
+{
+	[VTKView QBS_registerClassForStereo:[self class]];
+}
+
+
+
+#pragma mark Stereo
 
 - (IBAction)SwitchStereoMode:(id)sender // Override MPRView
 {
@@ -29,8 +40,9 @@
 				case QBSStereoTypeQuadBuffered:
 					[[QBSController sharedController] beginQuadBufferedAlertSheet:self];
 					break;
+				
 				case QBSStereoTypeRedBlue:
-					if( [self renderWindow]->GetStereoRender() == false)
+					if([self renderWindow]->GetStereoRender() == false)
 					{
 						[self renderWindow]->StereoRenderOn();
 						[self renderWindow]->SetStereoTypeToRedBlue();
@@ -40,8 +52,9 @@
 					
 					[self setNeedsDisplay:YES];
 					break;
+				
 				case QBSStereoTypeInterlaced:
-					if( [self renderWindow]->GetStereoRender() == false)
+					if([self renderWindow]->GetStereoRender() == false)
 					{
 						[self renderWindow]->StereoRenderOn();
 						[self renderWindow]->SetStereoTypeToInterlaced();

@@ -25,6 +25,7 @@
 {
 	BOOL handledExport = NO;
 	
+#warning Direct ivar access
 	if ([[exportFormat selectedCell] tag] == 0) // QuickTime Export
 	{
 		BOOL exportStereo = [[NSUserDefaults standardUserDefaults] boolForKey:QBSExportQuickTimeInStereoKey];
@@ -39,15 +40,15 @@
 			NSString *otherButtonTitle = (exportStereo ? monoButtonTitle : stereoButtonTitle);
 			
 			NSBeginAlertSheet(NSLocalizedStringFromTableInBundle(@"Export Stereo QuickTime Movie", nil, myBundle, @"Ask to export stereo alert sheet title"),
-							  defaultButtonTitle, // defaultButton
-							  NSLocalizedStringFromTableInBundle(@"Open Settings", nil, myBundle, @"Ask to export stereo alert sheet open settings button title"),
-							  otherButtonTitle, // otherButton
-							  [NSApp mainWindow], // docWindow
-							  self, // modalDelegate
-							  NULL, // didEndSelector
-							  @selector(QBS_flyThruAskQuicktimeExportStereoAlertDidEnd:returnCode:contextInfo:), //didDismissSelector
-							  NULL, // contextInfo
-							  NSLocalizedStringFromTableInBundle(@"Would you like the exported QuickTime movie to be in stereo? A separate movie will be created for the left and right eyes.", nil, myBundle, @"Ask to export stereo alert sheet message"));
+			                  defaultButtonTitle, // defaultButton
+			                  NSLocalizedStringFromTableInBundle(@"Open Settings", nil, myBundle, @"Ask to export stereo alert sheet open settings button title"),
+			                  otherButtonTitle, // otherButton
+			                  [NSApp mainWindow], // docWindow
+			                  self, // modalDelegate
+			                  NULL, // didEndSelector
+			                  @selector(QBS_flyThruAskQuicktimeExportStereoAlertDidEnd:returnCode:contextInfo:), //didDismissSelector
+			                  NULL, // contextInfo
+			                  NSLocalizedStringFromTableInBundle(@"Would you like the exported QuickTime movie to be in stereo? A separate movie will be created for the left and right eyes.", nil, myBundle, @"Ask to export stereo alert sheet message"));
 		}
 		else if (exportStereo)
 		{
@@ -66,45 +67,53 @@
 	NSString *baseName = [[[[self window3DController] fileList] objectAtIndex:0] valueForKeyPath:@"series.study.name"];
 	NSString *leftName = [NSString stringWithFormat:@"%@ - Left", baseName];
 	NSString *rightName = [NSString stringWithFormat:@"%@ - Right", baseName];
-	vtkRenderWindow *renderWindow = [(VTKView *)[[self window3DController] view] renderWindow];
+	VTKView *vtkView = [[self window3DController] view];
+	vtkRenderWindow *renderWindow = [vtkView renderWindow];
 	
 	Boolean oldStereoOn = renderWindow->GetStereoRender();
 	int oldStereoType = renderWindow->GetStereoType();
 	
-	if (oldStereoOn && (oldStereoType == VTK_STEREO_CRYSTAL_EYES))
-		// Can't do it. The camera movement will be in the right eye, but the left eye image will be captured, generating a static image.
-		[[QBSController sharedController] beginCannotExportStereoAlertSheet:self];
+	// Left movie
+	if (oldStereoOn && (oldStereoType == VTK_STEREO_CRYSTAL_EYES) && [vtkView respondsToSelector:@selector(QBS_setImageCaptureBufferToLeft)])
+		[vtkView QBS_setImageCaptureBufferToLeft];
 	else
 	{
-		renderWindow->SetStereoRender(1);
-		// Left movie
+		renderWindow->SetStereoRender(true);
 		renderWindow->SetStereoTypeToLeft();
-		QuicktimeExport *leftMov = [[QuicktimeExport alloc] initWithSelector:self
-																			:@selector(imageForFrame:maxFrame:)
-																			:[FT numberOfFrames]];	
-		[leftMov generateMovie:YES
-							  :[[[self window3DController] view] bounds]
-							  :NO
-							  :leftName];
-		[leftMov release];
-		
-		
-		// Right movie
-		renderWindow->SetStereoTypeToRight();
-		QuicktimeExport *rightMov = [[QuicktimeExport alloc] initWithSelector:self
-																			 :@selector(imageForFrame:maxFrame:)
-																			 :[FT numberOfFrames]];	
-		[rightMov generateMovie:YES
-							   :[[[self window3DController] view] bounds]
-							   :NO
-							   :rightName];
-		[rightMov release];
-		
-		
-		// Reset window
-		renderWindow->SetStereoRender(oldStereoOn);
-		renderWindow->SetStereoType(oldStereoType);
 	}
+	
+	QuicktimeExport *leftMov = [[QuicktimeExport alloc] initWithSelector:self
+	                                                                    :@selector(imageForFrame:maxFrame:)
+	                                                                    :[FT numberOfFrames]];	
+	[leftMov generateMovie:YES
+	                      :[[[self window3DController] view] bounds]
+	                      :NO
+	                      :leftName];
+	[leftMov release];
+	
+	
+	// Right movie
+	if (oldStereoOn && (oldStereoType == VTK_STEREO_CRYSTAL_EYES) && [vtkView respondsToSelector:@selector(QBS_setImageCaptureBufferToRight)])
+		[vtkView QBS_setImageCaptureBufferToRight];
+	else
+	{
+		renderWindow->SetStereoRender(true);
+		renderWindow->SetStereoTypeToRight();
+	}
+	
+	QuicktimeExport *rightMov = [[QuicktimeExport alloc] initWithSelector:self
+	                                                                     :@selector(imageForFrame:maxFrame:)
+	                                                                     :[FT numberOfFrames]];	
+	[rightMov generateMovie:YES
+	                       :[[[self window3DController] view] bounds]
+	                       :NO
+	                       :rightName];
+	[rightMov release];
+	
+	
+	// Reset window
+	renderWindow->SetStereoRender(oldStereoOn);
+	renderWindow->SetStereoType(oldStereoType);
 }
 
 

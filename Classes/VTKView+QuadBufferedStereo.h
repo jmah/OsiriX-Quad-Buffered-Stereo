@@ -12,6 +12,10 @@
 
 @interface VTKView (QuadBufferedStereo)
 
+#pragma mark Initialization and Deallocation
 - (id)QBS_initWithFrame:(NSRect)frame; // Will be swizzled for -initWithFrame:
+
+#pragma mark Stereo Registration
++ (void)QBS_registerClassForStereo:(Class)klass;
 
 @end

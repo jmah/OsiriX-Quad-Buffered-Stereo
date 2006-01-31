@@ -17,8 +17,17 @@
 #undef id
 
 
+typedef struct _QBSClassNode {
+	Class klass;
+	struct _QBSClassNode *next;
+} QBSClassNode;
+
+static QBSClassNode *registeredClasses = NULL;
+
+
 @implementation VTKView (QuadBufferedStereo)
 
+#pragma mark Initialization and Deallocation
 
 + (void)load
 {
@@ -28,52 +37,73 @@
 
 - (id)QBS_initWithFrame:(NSRect)frame // Will be swizzled for -initWithFrame:
 {
-	if ([self isKindOfClass:[VRView class]])
-		return [self QBS_initWithFrame:frame];
+	BOOL matchingClass = NO;
+	QBSClassNode *currClassNode = registeredClasses;
+	while (!matchingClass && currClassNode)
+		if ([self isKindOfClass:currClassNode->klass])
+			matchingClass = YES;
+		else
+			currClassNode = currClassNode->next;
 	
-	switch ([[NSUserDefaults standardUserDefaults] integerForKey:QBSStereoTypeKey])
+	BOOL enableQuadBufferedStereo = NO;
+	if (matchingClass && ([[NSUserDefaults standardUserDefaults] integerForKey:QBSStereoTypeKey] == QBSStereoTypeQuadBuffered))
+		enableQuadBufferedStereo = YES;
+	
+	if (enableQuadBufferedStereo)
 	{
-		case QBSStereoTypeQuadBuffered:
-			if (self = [super initWithFrame:frame])
-			{
-				_renderer = vtkRenderer::New();
-				
-				[NSOpenGLPixelFormat QBS_forceStereo:YES]; // Force the OpenGL context to be created in stereo
-				_cocoaRenderWindow = vtkCocoaRenderWindow::New();
-				_cocoaRenderWindow->StereoCapableWindowOn(); // Yes! Do this before the window ID is set
-				_cocoaRenderWindow->SetWindowId([self window]);
-				_cocoaRenderWindow->SetDisplayId(self);
-				
-				_cocoaRenderWindow->AddRenderer(_renderer);
-				_interactor = vtkCocoaRenderWindowInteractor::New();
-				_interactor->SetRenderWindow(_cocoaRenderWindow);
-				
-				vtkInteractorStyle *interactorStyle;
-				interactorStyle = vtkInteractorStyleTrackballCamera::New();
-				_interactor->SetInteractorStyle(interactorStyle);
-				interactorStyle->Delete();
-				
-				[self setVTKRenderWindow:_cocoaRenderWindow];
-				
-				_interactor->Initialize();
-				
-				[NSOpenGLPixelFormat QBS_forceStereo:NO];
-				
-				[self renderWindow]->StereoRenderOn();
-				[self renderWindow]->SetStereoTypeToCrystalEyes(); // Quad-Buffered!
-				
-				// Set display in stereo mode once we know what screen we're on (next run loop cycle)
-				[NSTimer scheduledTimerWithTimeInterval:0
-				                                 target:[QBSController sharedController]
-				                               selector:@selector(setUpScreenForStereo:)
-				                               userInfo:self
-				                                repeats:NO];
-			}
-			break;
-		default:
-			self = [self QBS_initWithFrame:frame];
+		if (self = [super initWithFrame:frame])
+		{
+#warning Direct ivar access
+			_renderer = vtkRenderer::New();
+			
+			[NSOpenGLPixelFormat QBS_forceStereo:YES]; // Force the OpenGL context to be created in stereo
+			_cocoaRenderWindow = vtkCocoaRenderWindow::New();
+			_cocoaRenderWindow->StereoCapableWindowOn(); // Yes! Do this before the window ID is set
+			_cocoaRenderWindow->SetWindowId([self window]);
+			_cocoaRenderWindow->SetDisplayId(self);
+			
+			_cocoaRenderWindow->AddRenderer(_renderer);
+			_interactor = vtkCocoaRenderWindowInteractor::New();
+			_interactor->SetRenderWindow(_cocoaRenderWindow);
+			
+			vtkInteractorStyle *interactorStyle;
+			interactorStyle = vtkInteractorStyleTrackballCamera::New();
+			_interactor->SetInteractorStyle(interactorStyle);
+			interactorStyle->Delete();
+			
+			[self setVTKRenderWindow:_cocoaRenderWindow];
+			
+			_interactor->Initialize();
+			
+			[NSOpenGLPixelFormat QBS_forceStereo:NO];
+			
+			[self renderWindow]->StereoRenderOn();
+			[self renderWindow]->SetStereoTypeToCrystalEyes(); // Quad-Buffered!
+			
+			// Set display in stereo mode once we know what screen we're on (next run loop cycle)
+			[NSTimer scheduledTimerWithTimeInterval:0
+			                                 target:[QBSController sharedController]
+			                               selector:@selector(setUpScreenForStereo:)
+			                               userInfo:self
+			                                repeats:NO];
+		}
 	}
+	else
+		self = [self QBS_initWithFrame:frame];
+	
     return self;
+}
+
+
+
+#pragma mark Stereo Registration
+
++ (void)QBS_registerClassForStereo:(Class)klass
+{
+	QBSClassNode *newNode = (QBSClassNode *)malloc(sizeof(QBSClassNode));
+	newNode->klass = klass;
+	newNode->next = registeredClasses;
+	registeredClasses = newNode;
 }
 
 

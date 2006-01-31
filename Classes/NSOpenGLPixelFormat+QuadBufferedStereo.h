@@ -11,7 +11,10 @@
 
 @interface NSOpenGLPixelFormat (QuadBufferedStereo)
 
-+ (void)QBS_forceStereo:(BOOL)stereo;
+#pragma mark Initialization and Deallocation
 - (id)QBS_initWithAttributes:(NSOpenGLPixelFormatAttribute *)attribs; // Will be swizzled for -initWithAttributes:
+
+#pragma mark Stereo
++ (void)QBS_forceStereo:(BOOL)stereo;
 
 @end

@@ -7,11 +7,22 @@
 //
 
 #import "VRView+QuadBufferedStereo.h"
+#import "VTKView+QuadBufferedStereo.h"
 #import "QBSController.h"
 
 
 @implementation VRView (QuadBufferedStereo)
 
+#pragma mark Initialization and Deallocation
+
++ (void)initialize
+{
+	[VTKView QBS_registerClassForStereo:[self class]];
+}
+
+
+
+#pragma mark Stereo
 
 - (IBAction)SwitchStereoMode:(id)sender // Override VRView
 {
@@ -29,9 +40,11 @@
 				case QBSStereoTypeQuadBuffered:
 					[[QBSController sharedController] beginQuadBufferedAlertSheet:self];
 					break;
+				
 				case QBSStereoTypeRedBlue:
-					if( [self renderWindow]->GetStereoRender() == false)
+					if([self renderWindow]->GetStereoRender() == false)
 					{
+#warning Direct ivar access
 						orientationWidget->Off();
 						
 						[self renderWindow]->StereoRenderOn();
@@ -45,8 +58,9 @@
 					
 					[self setNeedsDisplay:YES];
 					break;
+				
 				case QBSStereoTypeInterlaced:
-					if( [self renderWindow]->GetStereoRender() == false)
+					if([self renderWindow]->GetStereoRender() == false)
 					{
 						orientationWidget->Off();
 						

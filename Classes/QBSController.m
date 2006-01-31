@@ -18,7 +18,6 @@
 
 @implementation QBSController
 
-
 #pragma mark Convenience Methods
 
 + (id)sharedController
@@ -47,14 +46,13 @@
 
 - (void)setUpScreenForStereo:(NSTimer *)timer // userInfo is an NSView
 {
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:QBSForceBlueLineSyncKey])
-	{
-		CGDirectDisplayID currDisplay = (CGDirectDisplayID)[[[[[[timer userInfo] window] screen] deviceDescription] objectForKey:@"NSScreenNumber"] pointerValue];
-		CGDisplayConfigRef confRef;
-		CGBeginDisplayConfiguration(&confRef);
-		CGConfigureDisplayStereoOperation(confRef, currDisplay, true, true);
-		CGCompleteDisplayConfiguration(confRef, kCGConfigureForAppOnly);
-	}
+	boolean_t forceBlueLineSync = ([[NSUserDefaults standardUserDefaults] boolForKey:QBSForceBlueLineSyncKey] ? true : false);
+	
+	CGDirectDisplayID currDisplay = (CGDirectDisplayID)[[[[[[timer userInfo] window] screen] deviceDescription] objectForKey:@"NSScreenNumber"] pointerValue];
+	CGDisplayConfigRef confRef;
+	CGBeginDisplayConfiguration(&confRef);
+	CGConfigureDisplayStereoOperation(confRef, currDisplay, true, forceBlueLineSync);
+	CGCompleteDisplayConfiguration(confRef, kCGConfigureForAppOnly);
 }
 
 
@@ -87,24 +85,6 @@
 	                  @selector(quadBufferedAlertSheetDidDismiss:returnCode:contextInfo:), //didDismissSelector
 	                  NULL, // contextInfo
 	                  NSLocalizedStringFromTableInBundle(@"Quad-buffered stereo cannot be toggled on and off whilst a 3D view is open. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when in a 2D view.", nil, myBundle, @"Quad-buffered alert sheet message"));
-}
-
-
-- (IBAction)beginCannotExportStereoAlertSheet:(id)sender
-{
-	static NSBundle *myBundle = nil;
-	if (!myBundle)
-		myBundle = [NSBundle bundleForClass:[self class]];
-	NSBeginAlertSheet(NSLocalizedStringFromTableInBundle(@"Cannot Create Stereo QuickTime Movie", nil, myBundle, @"Cannot export stereo alert sheet title"),
-	                  nil, // defaultButton: OK
-	                  NSLocalizedStringFromTableInBundle(@"Open Settings", nil, myBundle, @"Cannot export stereo alert sheet open settings button title"),
-	                  nil, // otherButton: none
-	                  [NSApp mainWindow], // docWindow
-	                  self, // modalDelegate
-	                  NULL, // didEndSelector
-	                  @selector(quadBufferedAlertSheetDidDismiss:returnCode:contextInfo:), //didDismissSelector
-	                  NULL, // contextInfo
-	                  NSLocalizedStringFromTableInBundle(@"A stereo QuickTime movie cannot be created when the 3D view is using quad-buffered stereo. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when in a 2D view.", nil, myBundle, @"Cannot export stereo alert sheet message"));
 }
 
 
