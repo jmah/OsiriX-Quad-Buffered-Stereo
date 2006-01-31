@@ -75,7 +75,7 @@
 	static NSBundle *myBundle = nil;
 	if (!myBundle)
 		myBundle = [NSBundle bundleForClass:[self class]];
-	NSBeginAlertSheet(NSLocalizedStringFromTableInBundle(@"Quad-Buffered Stereo Cannot Be Toggled", nil, myBundle, @"Quad-buffered alert sheet title"),
+	NSBeginAlertSheet(NSLocalizedStringFromTableInBundle(@"Quad-Buffered Stereo Cannot Be Switched", nil, myBundle, @"Quad-buffered alert sheet title"),
 	                  nil, // defaultButton: OK
 	                  NSLocalizedStringFromTableInBundle(@"Open Settings", nil, myBundle, @"Quad-buffered alert sheet open settings button title"),
 	                  nil, // otherButton: none
@@ -84,7 +84,7 @@
 	                  NULL, // didEndSelector
 	                  @selector(quadBufferedAlertSheetDidDismiss:returnCode:contextInfo:), //didDismissSelector
 	                  NULL, // contextInfo
-	                  NSLocalizedStringFromTableInBundle(@"Quad-buffered stereo cannot be toggled on and off whilst a 3D view is open. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when in a 2D view.", nil, myBundle, @"Quad-buffered alert sheet message"));
+	                  NSLocalizedStringFromTableInBundle(@"Quad-buffered stereo cannot be switched on and off whilst a 3D view is open. To change stereo settings, shift-click the Stereo toolbar button or select the Plugins > Others > Quad-Buffered Stereo menu item when in a 2D view.", nil, myBundle, @"Quad-buffered alert sheet message"));
 }
 
 
