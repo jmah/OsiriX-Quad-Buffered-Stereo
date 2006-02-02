@@ -1,0 +1,22 @@
+Index: VolumeRendering/vtkOpenGLRayCastImageDisplayHelper.cxx
+===================================================================
+RCS file: /cvsroot/VTK/VTK/VolumeRendering/vtkOpenGLRayCastImageDisplayHelper.cxx,v
+retrieving revision 1.4
+diff -u -r1.4 vtkOpenGLRayCastImageDisplayHelper.cxx
+--- VolumeRendering/vtkOpenGLRayCastImageDisplayHelper.cxx	23 May 2005 19:35:38 -0000	1.4
++++ VolumeRendering/vtkOpenGLRayCastImageDisplayHelper.cxx	1 Feb 2006 05:26:39 -0000
+@@ -107,11 +107,14 @@
+   float tcoords[8];
+   
+   float depth;
++  /*
++   * Ignore the preferred depth; it causes incorrect stereo rendering
+   if ( requestedDepth > 0.0 && requestedDepth <= 1.0 )
+     {
+     depth = requestedDepth;
+     }
+   else
++  */
+     {
+     // Pass the center of the volume through the world to view function
+     // of the renderer to get the z view coordinate to use for the

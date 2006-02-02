@@ -21,6 +21,8 @@
 		0ED1D460094906CB0085FBBD /* SRView+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D454094906CB0085FBBD /* SRView+QuadBufferedStereo.mm */; };
 		0ED1D4A3094909D00085FBBD /* Small SAPAC Logo No Text.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ED1D4A2094909D00085FBBD /* Small SAPAC Logo No Text.png */; };
 		0ED4DF2F0947F86600970BD5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
+		0EEA6D7909905DBD0039E1C1 /* VRView+QuadBufferedStereo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ED1D456094906CB0085FBBD /* VRView+QuadBufferedStereo.mm */; };
+		0EEA6E11099091600039E1C1 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0EEA6E0F0990915F0039E1C1 /* Credits.rtf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -1258,6 +1260,9 @@
 		0ED1D478094907050085FBBD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		0ED1D4A2094909D00085FBBD /* Small SAPAC Logo No Text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Small SAPAC Logo No Text.png"; sourceTree = "<group>"; };
 		0ED1D4E009490B770085FBBD /* QBSSwizzleMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBSSwizzleMethod.h; sourceTree = "<group>"; };
+		0EEA6E00099080AE0039E1C1 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		0EEA6E01099080B20039E1C1 /* README-Development.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README-Development.txt"; sourceTree = "<group>"; };
+		0EEA6E100990915F0039E1C1 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		AB5D36050680E57E00F4007A /* Quad-Buffered Stereo.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Quad-Buffered Stereo.plugin"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -1278,6 +1283,8 @@
 		089C166AFE841209C02AAC07 /* Duplicate */ = {
 			isa = PBXGroup;
 			children = (
+				0EEA6E00099080AE0039E1C1 /* README.txt */,
+				0EEA6E01099080B20039E1C1 /* README-Development.txt */,
 				0ED1D44C094906CB0085FBBD /* Classes */,
 				0ED1D465094906E60085FBBD /* Other Sources */,
 				0EC884D00947B211006BFC6E /* OsiriX Headers */,
@@ -2526,6 +2533,7 @@
 				0EC5013609491EA800B45B6A /* InfoPlist.strings */,
 				0EC5013A09491EA800B45B6A /* Localizable.strings */,
 				0EC5013809491EA800B45B6A /* QBSSettings.nib */,
+				0EEA6E0F0990915F0039E1C1 /* Credits.rtf */,
 				0ED1D4A2094909D00085FBBD /* Small SAPAC Logo No Text.png */,
 			);
 			path = Resources;
@@ -2649,6 +2657,7 @@
 				0EC5013C09491EA800B45B6A /* InfoPlist.strings in Resources */,
 				0EC5013D09491EA800B45B6A /* QBSSettings.nib in Resources */,
 				0EC5013E09491EA800B45B6A /* Localizable.strings in Resources */,
+				0EEA6E11099091600039E1C1 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2666,6 +2675,7 @@
 				0EC500CE0949185B00B45B6A /* QBSController.m in Sources */,
 				0EC655A70987156F00EB7182 /* FlyThruController+QuadBufferedStereo.mm in Sources */,
 				0EC656B609873C0400EB7182 /* VTKView+QuadBufferedStereo.mm in Sources */,
+				0EEA6D7909905DBD0039E1C1 /* VRView+QuadBufferedStereo.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2694,6 +2704,14 @@
 				0EC5013B09491EA800B45B6A /* English */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		0EEA6E0F0990915F0039E1C1 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0EEA6E100990915F0039E1C1 /* English */,
+			);
+			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
