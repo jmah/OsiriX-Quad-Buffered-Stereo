@@ -140,13 +140,10 @@ static NSMutableDictionary *ivarMapping = nil; // Keys are NSValue objects with 
 	if (renderWindow->GetStereoRender() && (renderWindow->GetStereoType() == VTK_STEREO_CRYSTAL_EYES) && bufferString)
 	{
 		renderWindow->MakeCurrent();
-#warning These are reversed due to the inverted stereo bug
 		if ([bufferString isEqualToString:@"Left"])
-			//glReadBuffer(GL_FRONT_LEFT);
-			glReadBuffer(GL_FRONT_RIGHT);
-		else if ([bufferString isEqualToString:@"Right"])
-			//glReadBuffer(GL_FRONT_RIGHT);
 			glReadBuffer(GL_FRONT_LEFT);
+		else if ([bufferString isEqualToString:@"Right"])
+			glReadBuffer(GL_FRONT_RIGHT);
 	}
 	
 	return [self QBS_nsimage:YES];
