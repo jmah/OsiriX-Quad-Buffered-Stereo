@@ -2,11 +2,11 @@
                                 OsiriX Plugin
                             README for Developers
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-02-01 by Jonathon Mah
+                   Last Updated: 2006-02-13 by Jonathon Mah
 
 
 
-Class Overview:
+Class List:
   QuadBufferedStereo
     The plugin class that OsiriX talks to when the menu item is selected.
   QBSController
@@ -31,7 +31,7 @@ Class Overview:
     Adds stereo movie export for fly-throughs.
 
 
-Code Introduction:
+Code Overview:
   The Quad-Buffered Stereo plugin makes extensive use of "method sizzling", a
   technique which changes the runtime class structure to remap method
   implementations.  It sounds scary, but it's perfectly safe. :) CocoaDev has
@@ -71,7 +71,7 @@ Code Introduction:
   read from the left eye buffer, so stereo movies cannot be created. To read
   from the correct buffer, glReadBuffer() must be called. This is the job of
   -[SRView QBS_nsimage:], which is called in place of the original
-  -[SRView nsimage:] method.
+  -[SRView nsimage:] method (and similarly for VRView).
 
 
 Fragility:
@@ -83,6 +83,9 @@ Fragility:
   
   The same is the case with the -initWithFrame: method in VTKView, and
   -QBS_flyThruQuickTimeExportStereo in FlyThruController.
+  
+  It would be best to integrate the functionality of this plugin directly into
+  OsiriX, so that future OsiriX changes will not break it.
 
 
 3D Volume Rendering:
@@ -91,7 +94,7 @@ Fragility:
   
   VTK performs stereo rendering in the OpenGL renderer, using the OpenGL
   geometry to calculate the appropriate images for left and right eyes. VTK
-  performs volume renderings in its own software and then places it into the
+  performs ray cast volume renderings in software and then places it into the
   OpenGL scene as a texture on a simple quad (plane). Without modification,
   this quad is placed close to the camera, adding extra stereo separation to
   the volume. For the volume to be correctly displayed, the quad must be
@@ -102,17 +105,16 @@ Fragility:
   class 'vtkOpenGLRayCastImageDisplayHelper'. I don't know the consequences of
   doing this, but it seems to have the desired effect. A simple patch to do
   this is included in the file 'vtkOpenGLRayCastImageDisplayHelper.cxx.patch'.
-  Having to alter VTK is undesirable, as it means that both VTK adn OsiriX
+  Having to alter VTK is undesirable, as it means that both VTK and OsiriX
   must be recompiled.
   
   This workaround could change if/when OsiriX adds support for alternate
   volume renderers, such as shear warping.
   
-  As noted in 'README.txt', another issue is the stereo inversion of volume
-  renderings (the left eye image is displayed in the right eye, and
-  vice-versa). I couldn't see what caused this, and have left it unfixed at
-  the moment. If you find a fix, please contact me (Jonathon Mah; details
-  below).
+  This still contains a bug, though: the stereo is inverted (the left eye
+  image is displayed in the right eye, and vice-versa). I couldn't see what
+  caused this, and have left it unfixed at the moment. If you find a fix,
+  please contact me (Jonathon Mah; details below).
 
 
 Links:

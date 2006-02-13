@@ -2,7 +2,7 @@
                                 OsiriX Plugin
                                     README
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-02-01 by Jonathon Mah
+                   Last Updated: 2006-02-13 by Jonathon Mah
 
 
 
@@ -27,7 +27,7 @@ Features:
 - Stereo viewing of all 3D renderings
   - MPR
   - Maximum Intensity Projection
-  - Volume Rendering
+  - Volume Rendering (3D Texture only)
   - Surface Rendering
   - Endoscopy
 - Stereo exports of fly-throughs
@@ -50,12 +50,26 @@ Usage:
 Tips:
 - Set the background of 3D MPR views to dark gray instead of black, so you can
   tell the background from the black edges of slices.
+- Stereo support in volume renderings only correctly works with the "3D
+  Texture" rendering mode. See the "Volume Rendering" section below.
+
+
+Volume Rendering:
+  For technical reasons, stereo rendering does not correctly work when using
+  the Ray Cast volume renderer, only with the 3D Texture renderer. To
+  change the current renderer, open a volume rendering view and use the
+  "Engine" toolbar button. (You may need to add it.)
+  
+  One caveat of the 3D Texture renderer is that it cannot render as much data
+  as the Ray Cast renderer. If a volume rendering appears "blank", it is
+  likely that there is too much data for the renderer to handle. To reduce the
+  data, use the "Reduce Series" image filter plugin.
 
 
 Bugs:
-- The left and right images are inverted in volume rendering modes (MIP,
-  Volume Rendering, and Endoscopy)
 - The "Quad-Buffered Stereo" menu item is not available from within a 3D view
+- Stereo support in volume renderings only correctly works with the "Texture
+  Mapping" rendering mode. See "README-Development.txt" for more information.
 
 
 Credits:
