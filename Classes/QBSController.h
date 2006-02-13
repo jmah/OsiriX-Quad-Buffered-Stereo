@@ -25,6 +25,7 @@ typedef enum _QBSStereoType {
 @interface QBSController : NSObject
 {
 	IBOutlet NSPanel *settingsPanel;
+	IBOutlet NSTextView *creditsTextView;
 }
 
 

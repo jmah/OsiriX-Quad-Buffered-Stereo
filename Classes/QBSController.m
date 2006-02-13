@@ -30,6 +30,23 @@
 
 
 
+#pragma mark Initialization and Deallocation
+
+- (void)awakeFromNib
+{
+	NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
+	NSString *creditsPath = [myBundle pathForResource:@"Credits" ofType:@"rtf"];
+	NSData *creditsRTFData = [NSData dataWithContentsOfFile:creditsPath];
+	if (creditsRTFData)
+	{
+		NSAttributedString *creditsAttrString = [[NSAttributedString alloc] initWithRTF:creditsRTFData documentAttributes:NULL];
+		[[creditsTextView textStorage] setAttributedString:creditsAttrString];
+		[creditsAttrString release];
+	}
+}
+
+
+
 #pragma mark Utility Methods
 
 - (void)registerUserDefaults

@@ -7,10 +7,10 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {showSettingsPanel = id; }; 
+            ACTIONS = {beginQuadBufferedAlertSheet = id; showSettingsPanel = id; }; 
             CLASS = QBSController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {settingsPanel = NSPanel; }; 
+            OUTLETS = {creditsTextView = NSTextView; settingsPanel = NSPanel; }; 
             SUPERCLASS = NSObject; 
         }
     ); 
