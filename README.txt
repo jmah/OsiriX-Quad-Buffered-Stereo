@@ -96,7 +96,7 @@ Links:
 
 
 Version History:
-1.0   (2006-02-xx)
+1.0   (2006-02-14)
   - Initial public release
 
 0.1   (2005-12-08)
