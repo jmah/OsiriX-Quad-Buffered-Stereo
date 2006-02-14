@@ -2,7 +2,7 @@
                                 OsiriX Plugin
                                     README
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-02-13 by Jonathon Mah
+                   Last Updated: 2006-02-14 by Jonathon Mah
 
 
 
@@ -77,8 +77,8 @@ Credits:
   South Australian Partnership for Advanced Computing (SAPAC), over the
   (Australian) summer of 2005-2006. Thanks to Craig Hill for the initial idea
   and ongoing support; Paul Bourke for the introduction to stereoscopy and
-  great sample code; and Dr Antoine Rosset and the OsiriX development team for
-  an amazing open-source product.
+  great sample code; and Antoine Rosset and the OsiriX development team for an
+  amazing open-source product.
 
 
 Links:
