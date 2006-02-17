@@ -8,6 +8,7 @@
 
 #import "MPRView+QuadBufferedStereo.h"
 #import "VTKView+QuadBufferedStereo.h"
+#import "QBSSwizzleMethod.h"
 #import "QBSController.h"
 
 
@@ -18,6 +19,15 @@
 + (void)initialize
 {
 	[VTKView QBS_registerClassForStereo:[self class]];
+}
+
+
+- (void)awakeFromNib
+{
+	// Switch into stereo mode if need be
+	if (([self renderWindow]->GetStereoRender() == false) &&
+	    [[NSUserDefaults standardUserDefaults] boolForKey:QBSEnableStereoKey])
+		[self SwitchStereoMode:nil];
 }
 
 

@@ -13,6 +13,7 @@
 @interface VRView (QuadBufferedStereo)
 
 #pragma mark Initialization and Deallocation
+- (void)awakeFromNib;
 - (void)QBS_dealloc; // Will be swizzled for -dealloc
 
 #pragma mark Stereo

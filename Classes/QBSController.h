@@ -11,6 +11,7 @@
 
 // NSUserDefaults keys
 #define QBSStereoTypeKey @"QBSStereoType"
+#define QBSEnableStereoKey @"QBSEnableStereo"
 #define QBSForceBlueLineSyncKey @"QBSForceBlueLineSync"
 #define QBSExportQuickTimeInStereoKey @"QBSExportQuickTimeInStereo"
 #define QBSAskExportQuickTimeInStereoKey @"QBSAskExportQuickTimeInStereo"

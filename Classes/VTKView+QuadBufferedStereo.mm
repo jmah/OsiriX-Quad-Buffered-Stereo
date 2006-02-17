@@ -46,7 +46,9 @@ static QBSClassNode *registeredClasses = NULL;
 			currClassNode = currClassNode->next;
 	
 	BOOL enableQuadBufferedStereo = NO;
-	if (matchingClass && ([[NSUserDefaults standardUserDefaults] integerForKey:QBSStereoTypeKey] == QBSStereoTypeQuadBuffered))
+	if (matchingClass &&
+	    [[NSUserDefaults standardUserDefaults] boolForKey:QBSEnableStereoKey] &&
+	    ([[NSUserDefaults standardUserDefaults] integerForKey:QBSStereoTypeKey] == QBSStereoTypeQuadBuffered))
 		enableQuadBufferedStereo = YES;
 	
 	if (enableQuadBufferedStereo)

@@ -52,6 +52,7 @@
 - (void)registerUserDefaults
 {
 	NSDictionary *regDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithBool:YES], QBSEnableStereoKey,
 		[NSNumber numberWithUnsignedInt:QBSStereoTypeRedBlue], QBSStereoTypeKey,
 		[NSNumber numberWithBool:YES], QBSForceBlueLineSyncKey,
 		[NSNumber numberWithBool:NO], QBSExportQuickTimeInStereoKey,

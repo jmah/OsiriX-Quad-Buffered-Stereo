@@ -33,6 +33,15 @@ static NSMutableDictionary *ivarMapping = nil; // Keys are NSValue objects with 
 }
 
 
+- (void)awakeFromNib
+{
+	// Switch into stereo mode if need be
+	if (([self renderWindow]->GetStereoRender() == false) &&
+	    [[NSUserDefaults standardUserDefaults] boolForKey:QBSEnableStereoKey])
+		[self SwitchStereoMode:nil];
+}
+
+
 - (void)QBS_dealloc // Will be swizzled for -dealloc
 {
 	[ivarMapping removeObjectForKey:[NSValue valueWithPointer:self]];

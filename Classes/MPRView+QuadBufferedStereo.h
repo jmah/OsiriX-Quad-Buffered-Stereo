@@ -12,6 +12,9 @@
 
 @interface MPRView (QuadBufferedStereo)
 
+#pragma mark Initialization and Deallocation
+- (void)awakeFromNib;
+
 #pragma mark Stereo
 - (IBAction)SwitchStereoMode:(id)sender; // Override MPRView
 
