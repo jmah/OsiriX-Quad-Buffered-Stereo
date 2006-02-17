@@ -39,6 +39,8 @@
 	IBOutlet NSBox			*boxPlay;
 	IBOutlet NSSlider		*framesSlider;
 	IBOutlet NSButton		*playButton;
+	IBOutlet NSTextField	*dcmSeriesName;
+	
 			 NSPoint		boxPlayOrigin;
 			 NSRect			windowFrame;
 			 
@@ -47,7 +49,7 @@
 	
 	FlyThru					*FT;
 	Window3DController		*controller3D;
-	FlyThruAdapter			*FTAdapter; // link between abstract fly thru and concret 3D world (such as VR, SR, ...)
+	FlyThruAdapter			*FTAdapter;			// link between abstract fly thru and concret 3D world (such as VR, SR, ...)
 	
 	NSTimer					*movieTimer;
 	NSTimeInterval			lastMovieTime;

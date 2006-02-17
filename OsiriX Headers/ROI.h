@@ -34,12 +34,13 @@ enum
 
 @interface ROI : NSObject <NSCoding>
 {
-	int			textureWidth, oldTextureWidth, textureHeight, oldTextureHeight;
+	int				textureWidth, textureHeight;
+
 	unsigned char*	textureBuffer;
-	unsigned char* tempTextureBuffer;
-	GLuint textureName;
-	int textureUpLeftCornerX,textureUpLeftCornerY,textureDownRightCornerX,textureDownRightCornerY;
-	int textureFirstPoint;
+	GLuint			textureName;
+	int				textureUpLeftCornerX,textureUpLeftCornerY,textureDownRightCornerX,textureDownRightCornerY;
+	int				textureFirstPoint;
+	
 	NSMutableArray  *points;
 	NSRect			rect;
 	
@@ -64,9 +65,10 @@ enum
 	// **** **** **** **** **** **** **** **** **** **** TRACKING
 	
 	long			selectedModifyPoint;
-	NSPoint			clickPoint;
+	NSPoint			clickPoint, previousPoint;
 	long			fontListGL;
 	DCMView			*curView;
+	DCMPix			*pix;
 	
 	float			rmean, rmax, rmin, rdev, rtotal;
 	
@@ -75,11 +77,11 @@ enum
 	StringTexture			*stringTex;
 	NSMutableDictionary		*stanStringAttrib;
 	
-	NSString *_roiSeriesInstanceUID;
-	NSString *_sopInstanceUID;
-	NSString *_referencedSOPInstanceUID;
-	NSString *_referencedSOPClassUID;
-	int _frameNumber;
+	NSString		*_roiSeriesInstanceUID;
+	NSString		*_sopInstanceUID;
+	NSString		*_referencedSOPInstanceUID;
+	NSString		*_referencedSOPClassUID;
+	int				_frameNumber;
 	
 }
 
@@ -100,14 +102,9 @@ enum
 - (id)initWithDICOMPresentationState:(DCMObject *)presentationState
 		referencedSOPInstanceUID:(NSString *)referencedSOPInstanceUID
 		referencedSOPClassUID:(NSString *)referencedSOPClassUID;
-									
-+ (int)brushSize;
-+ (int)eraserSize;
-+ (void)setBrushSize:(int)newInt;
-+ (void)setEraserSize:(int)newInt;
 
 - (int)textureDownRightCornerX;
--(int)textureDownRightCornerY;
+- (int)textureDownRightCornerY;
 - (int)textureUpLeftCornerX;
 - (int)textureUpLeftCornerY;
 
@@ -191,7 +188,8 @@ enum
 - (void) rotate: (float) angle :(NSPoint) center;
 - (void) resize: (float) factor :(NSPoint) center;
 
-
+- (void) setPix: (DCMPix*) newPix;
+- (DCMPix*) pix;
 - (NSString *)roiSeriesInstanceUID;
 - (NSString *)sopInstanceUID;
 - (NSString *)referencedSOPInstanceUID;
@@ -202,6 +200,6 @@ enum
 - (void)setReferencedSOPInstanceUID:(NSString *)referencedSOPInstanceUID;
 - (void)setReferencedSOPClassUID:(NSString *)referencedSOPClassUID;
 - (void)setFrameNumber: (int)frameNumber;
-
+ -(void) reduceTextureIfPossible;
 
 @end

@@ -185,8 +185,6 @@ enum { barHide = 0, barOrigin, barFused, barBoth };
 	BOOL isKeyView; //needed for Image View subclass
 	NSCursor *cursor;
 	BOOL cursorSet;
-	
-	BOOL	displaySUVValue;
 }
 -(BOOL) flippedData;
 -(void) setFlippedData:(BOOL) f;
@@ -278,12 +276,10 @@ enum { barHide = 0, barOrigin, barFused, barBoth };
 - (IBAction) sliderRGBFactor:(id) sender;
 - (IBAction) alwaysSyncMenu:(id) sender;
 - (void) getCLUT:( unsigned char**) r : (unsigned char**) g : (unsigned char**) b;
--(void) doSyncronize:(NSNotification*)note;
--(BOOL) volumicSeries;
+- (void) doSyncronize:(NSNotification*)note;
+- (BOOL) volumicSeries;
 - (id)initWithFrame:(NSRect)frame imageRows:(int)rows  imageColumns:(int)columns;
 - (float)getSUV;
-- (BOOL) displaySUVValue;
-- (void) displaySUVValue: (BOOL) v;
 - (IBAction) roiLoadFromXMLFiles: (id) sender;
 - (float)mouseXPos;
 - (float)mouseYPos;

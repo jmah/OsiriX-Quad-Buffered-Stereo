@@ -174,6 +174,7 @@ typedef char* vtkMyCallbackVR;
 	IBOutlet NSSlider			*dcmframesSlider;
 	IBOutlet NSMatrix			*dcmExportMode, *dcmquality, *dcmrotation, *dcmorientation;
 	IBOutlet NSBox				*dcmBox;
+	IBOutlet NSTextField		*dcmSeriesName;
 
 	IBOutlet NSWindow       *export3DVRWindow;
 	IBOutlet NSMatrix		*VRFrames;

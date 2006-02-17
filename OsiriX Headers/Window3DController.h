@@ -16,10 +16,8 @@
 
 
 #import <Foundation/Foundation.h>
-
 @class ColorTransferView;
 @class OpacityTransferView;
-@class NSFullScreenWindow;
 
 
 #define DATABASEPATH				@"/DATABASE/"

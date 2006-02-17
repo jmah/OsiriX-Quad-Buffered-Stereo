@@ -57,11 +57,11 @@
 	BOOL				isRGB;
 	BOOL				inverseVal;
 	long				fPlanarConf;
-	BOOL				fIsSigned;
+	BOOL				fIsSigned, displaySUVValue;
 	
 	BOOL				fixed8bitsWLWW;
 	
-    float               slope, offset;
+    float               slope, offset, maxValueOfSeries;
 	
 	float				cineRate;
 	
@@ -92,6 +92,7 @@
 	BOOL				hasSUV, SUVConverted;
 	NSString			*units, *decayCorrection;
 	float				radionuclideTotalDose, patientsWeight;
+	NSDate				*acquisitionTime, *radiopharmaceuticalStartTime;
 	
 }
 
@@ -217,6 +218,9 @@
 - (void) setThickSlabController:( ThickSlabController*) ts;
 -(void) setFixed8bitsWLWW:(BOOL) f;
 -(BOOL) generated;
+- (float) maxValueOfSeries;
+- (void) setMaxValueOfSeries: (float) f;
+
 // Accessor methods needed for SUV calculations
 
 -(float) patientsWeight;
@@ -225,14 +229,25 @@
 -(float) radionuclideTotalDose;
 -(void) setRadionuclideTotalDose : (float) v;
 
+-(NSDate*) acquisitionTime;
+-(void) setAcquisitionTime : (NSDate*) d;
+
+-(NSDate*) radiopharmaceuticalStartTime;
+-(void) setRadiopharmaceuticalStartTime : (NSDate*) d;
+
 -(void) setSUVConverted : (BOOL) v;
 - (BOOL) SUVConverted;
 
--(NSString*) units;
--(NSString*) decayCorrection;
+- (NSString*) units;
+- (NSString*) decayCorrection;
+- (void) setDecayCorrection : (NSString*) s;
 //Database links
 - (NSManagedObject *)imageObj;
 - (NSManagedObject *)seriesObj;
 - (void) checkSUV;
 - (BOOL) hasSUV;
+- (BOOL) displaySUVValue;
+- (void) setDisplaySUVValue : (BOOL) v;
+- (void) copySUVfrom: (DCMPix*) from;
+- (NSString *)setUnits: (NSString *) s;
 @end

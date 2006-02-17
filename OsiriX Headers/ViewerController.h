@@ -130,6 +130,7 @@
 	IBOutlet NSMatrix		*dcmSelection, *dcmFormat;
 	IBOutlet NSSlider		*dcmInterval, *dcmFrom, *dcmTo;
 	IBOutlet NSBox			*dcmBox;
+	IBOutlet NSTextField	*dcmSeriesName;
 	
 	IBOutlet NSWindow       *imageExportWindow;
 	IBOutlet NSMatrix		*imageSelection, *imageFormat;
@@ -169,7 +170,7 @@
 	short					curMovieIndex, maxMovieIndex;
     NSToolbar               *toolbar;
 	
-	float					direction, loadingPercentage, maxValueOfSeries;
+	float					direction, loadingPercentage;
     
 	volatile BOOL			ThreadLoadImage, stopThreadLoadImage, loadingPause;
     BOOL                    FullScreenOn;
@@ -262,8 +263,10 @@
 - (void) loadROI:(long) mIndex;
 - (void) saveROI:(long) mIndex;
 - (id) findPlayStopButton;
+- (IBOutlet)setKeyImage:(id)sender;
 - (BOOL) FullScreenON;
 - (void) setROITool:(id) sender;
+- (void) setROITool:(int) roitype name :(NSString*) title;
 - (void) changeImageData:(NSMutableArray*)f :(NSMutableArray*)d :(NSData*) v :(BOOL) applyTransition;
 - (IBAction) loadSerie:(id) sender;
 - (IBAction) loadPatient:(id) sender;
@@ -365,10 +368,13 @@
 - (void) autoHideMatrix;
 - (void) exportQuicktimeIn:(long) dimension :(long) from :(long) to :(long) interval;
 - (IBAction) endExportImage: (id) sender;
-- (float) maxValueOfSeries;
 - (IBAction) setCurrentPosition:(id) sender;
 - (IBAction) setCurrentdcmExport:(id) sender;
 - (IBAction) endDisplaySUV:(id) sender;
 - (IBAction) endRoiRename:(id) sender;
 - (IBAction) roiRename:(id) sender;
+- (void) SyncSeries:(id) sender;
+- (float) computeVolume:(ROI*) selectedRoi points:(NSMutableArray**) pts error:(NSString**) error;
+- (NSArray*) roisWithName: (NSString*) name;
+- (NSArray*) roiNames;
 @end

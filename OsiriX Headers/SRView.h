@@ -206,11 +206,14 @@ typedef char* vtkPolyDataNormals;
 	NSDate						*startRenderingTime;
 	
 	NSMutableArray				*point3DActorArray;
+	//NSMutableArray			*point3DTextArray;
 	NSMutableArray				*point3DPositionsArray;
+	NSMutableArray				*point3DPositionsStringsArray;
 	NSMutableArray				*point3DRadiusArray;
 	NSMutableArray				*point3DColorsArray;
 	BOOL						display3DPoints;
 	IBOutlet NSPanel			*point3DInfoPanel;
+	IBOutlet NSTextField		*point3DPositionTextField;
 	IBOutlet NSSlider			*point3DRadiusSlider;
 	IBOutlet NSColorWell		*point3DColorWell;
 	IBOutlet NSButton			*point3DPropagateToAll, *point3DSetDefault;
