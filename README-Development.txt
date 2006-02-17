@@ -2,7 +2,7 @@
                                 OsiriX Plugin
                             README for Developers
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-02-13 by Jonathon Mah
+                   Last Updated: 2006-02-17 by Jonathon Mah
 
 
 
@@ -76,10 +76,18 @@ Code Overview:
 
 Fragility:
   The Quad-Buffered Stereo plugin uses certain code that may break in the
-  future. The overridden stereo switching methods are based on code taken from
-  the respective views in OsiriX. If the switching code in OsiriX changes,
-  these overridden methods (which don't ever call the original method) may
-  require updating.
+  future. Particularly, there are a few cases of direct instance variable
+  (ivar) access that require the OsiriX header files in the project to be
+  up-to-date. If they are not, the wrong ivars will be accessed at run-time.
+  The solution to this is to add accessor methods for these variables to the
+  OsiriX source files, and then change the Quad-Buffered Stereo code to use
+  these methods. Places in the code where direct ivar access occurs are marked
+  with compiler warnings.
+  
+  In some cases, code in the plugin is based on code from OsiriX. The
+  overridden stereo switching methods are based on code taken from the
+  respective views. If the switching code in OsiriX changes, these overridden
+  methods (which don't ever call the original method) may require updating.
   
   The same is the case with the -initWithFrame: method in VTKView, and
   -QBS_flyThruQuickTimeExportStereo in FlyThruController.
