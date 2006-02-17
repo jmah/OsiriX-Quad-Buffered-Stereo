@@ -2,7 +2,7 @@
                                 OsiriX Plugin
                                     README
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-02-14 by Jonathon Mah
+                   Last Updated: 2006-02-17 by Jonathon Mah
 
 
 
@@ -96,7 +96,7 @@ Links:
 
 
 Version History:
-1.0   (2006-02-14)
+1.0   (2006-02-17)
   - Initial public release
 
 0.1   (2005-12-08)
