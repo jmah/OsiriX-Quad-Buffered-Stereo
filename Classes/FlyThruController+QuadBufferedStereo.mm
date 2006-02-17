@@ -61,7 +61,7 @@
 			                  self, // modalDelegate
 			                  NULL, // didEndSelector
 			                  @selector(QBS_flyThruAskQuicktimeExportStereoAlertDidEnd:returnCode:contextInfo:), //didDismissSelector
-			                  NULL, // contextInfo
+			                  sender, // contextInfo
 			                  NSLocalizedStringFromTableInBundle(@"Would you like the exported QuickTime movie to be in stereo? A separate movie will be created for the left and right eyes.", nil, myBundle, @"Ask to export stereo alert sheet message"));
 		}
 		else if (exportStereo)
@@ -98,7 +98,7 @@
 	
 	QuicktimeExport *leftMov = [[QuicktimeExport alloc] initWithSelector:self
 	                                                                    :@selector(imageForFrame:maxFrame:)
-	                                                                    :[FT numberOfFrames]];	
+	                                                                    :[FT numberOfFrames]];
 	[leftMov generateMovie:YES
 	                      :[[[self window3DController] view] bounds]
 	                      :NO
@@ -117,7 +117,7 @@
 	
 	QuicktimeExport *rightMov = [[QuicktimeExport alloc] initWithSelector:self
 	                                                                     :@selector(imageForFrame:maxFrame:)
-	                                                                     :[FT numberOfFrames]];	
+	                                                                     :[FT numberOfFrames]];
 	[rightMov generateMovie:YES
 	                       :[[[self window3DController] view] bounds]
 	                       :NO
@@ -138,9 +138,9 @@
 	else
 	{
 		if ((returnCode == NSAlertDefaultReturn) == [[NSUserDefaults standardUserDefaults] boolForKey:QBSExportQuickTimeInStereoKey])
-			[self QBS_flyThruQuicktimeExportStereo:nil];
+			[self QBS_flyThruQuicktimeExportStereo:(id)contextInfo];
 		else
-			[self QBS_flyThruQuicktimeExport:nil];
+			[self QBS_flyThruQuicktimeExport:(id)contextInfo];
 	}
 }
 
