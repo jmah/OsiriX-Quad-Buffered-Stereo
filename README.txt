@@ -1,26 +1,27 @@
 ---------------------------  Quad-Buffered Stereo  ---------------------------
-                                OsiriX Plugin
+                                OsiriX Plug-in
+   <http://www.jonathonmah.com/devetc/projects/osirix_quad-buffered_stereo>
                                     README
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-02-17 by Jonathon Mah
+                   Last Updated: 2006-04-16 by Jonathon Mah
 
 
 
 Introduction:
-  The Quad-Buffered Stereo plugin for OsiriX allows you to view 3D
-  reconstructions in stereo. The plugin sends the left and right images to the
+  The Quad-Buffered Stereo plug-in for OsiriX allows you to view 3D
+  reconstructions in stereo. The plug-in sends the left and right images to the
   graphics card. Depending on your graphics card's capabilities, you can use
   viewing methods such as active shutter glasses or passive TwinView monitor
   output.
   
-  The plugin also adds stereo exporting of QuickTime fly-through movies.  This
+  The plug-in also adds stereo exporting of QuickTime fly-through movies.  This
   creates separate movie files for the left and right eyes.
 
 
 Requirements:
 - OsiriX 2.3
 - A graphics card capable of stereo output, for stereo viewing
-- Stereo movie exporting has no extra requirements
+- (Stereo movie exporting has no extra requirements.)
 
 
 Features:
@@ -31,7 +32,7 @@ Features:
   - Surface Rendering
   - Endoscopy
 - Stereo exports of fly-throughs
-- PPC and Intel compatibility (Universal Binary)
+- PowerPC and Intel compatibility (Universal Binary)
 
 
 Installation:
@@ -63,13 +64,14 @@ Volume Rendering:
   One caveat of the 3D Texture renderer is that it cannot render as much data
   as the Ray Cast renderer. If a volume rendering appears "blank", it is
   likely that there is too much data for the renderer to handle. To reduce the
-  data, use the "Reduce Series" image filter plugin.
+  data, use the "Reduce Series" image filter plug-in.
 
 
 Bugs:
-- The "Quad-Buffered Stereo" menu item is not available from within a 3D view
+- The "Quad-Buffered Stereo" menu item is not available from within a 3D view.
 - Stereo support in volume renderings only correctly works with the "Texture
   Mapping" rendering mode. See "README-Development.txt" for more information.
+- VolumePro is not currently supported.
 
 
 Credits:
@@ -104,7 +106,7 @@ Version History:
 
 
 License:
-  The Quad-Buffered Stereo plugin is Copyright 2005-2006 Jonathon Mah, SAPAC,
+  The Quad-Buffered Stereo plug-in is Copyright 2005-2006 Jonathon Mah, SAPAC,
   and is licensed under the MIT License as follows:
   
   Copyright (c) 2005-2006 Jonathon Mah, SAPAC

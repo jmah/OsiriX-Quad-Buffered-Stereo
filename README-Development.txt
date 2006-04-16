@@ -1,14 +1,15 @@
 ---------------------------  Quad-Buffered Stereo  ---------------------------
-                                OsiriX Plugin
+                                OsiriX Plug-in
+   <http://www.jonathonmah.com/devetc/projects/osirix_quad-buffered_stereo>
                             README for Developers
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-02-17 by Jonathon Mah
+                   Last Updated: 2006-04-16 by Jonathon Mah
 
 
 
 Class List:
   QuadBufferedStereo
-    The plugin class that OsiriX talks to when the menu item is selected.
+    The plug-in class that OsiriX talks to when the menu item is selected.
   QBSController
     The main controller that handles the settings user interface, user
     defaults, and initializing the screen to stereo. A singleton class
@@ -32,10 +33,10 @@ Class List:
 
 
 Code Overview:
-  The Quad-Buffered Stereo plugin makes extensive use of "method sizzling", a
+  The Quad-Buffered Stereo plug-in makes extensive use of "method sizzling", a
   technique which changes the runtime class structure to remap method
-  implementations.  It sounds scary, but it's perfectly safe. :) CocoaDev has
-  a good introduction to method swizzling, located at
+  implementations. It sounds scary, but it's perfectly safe. :) CocoaDev has a
+  good introduction to method swizzling, located at
   <http://www.cocoadev.com/index.pl?MethodSwizzling>. The purpose of this is
   to allow certain methods to be overridden by categories whilst keeping
   access to the original methods. For example, the primary method in
@@ -47,14 +48,13 @@ Code Overview:
   At runtime (in the +load method), the -initWithAttributes: method from the
   NSOpenGLPixelFormat will be renamed to -QBS_initWithAttributes:, and our
   method will be renamed to -initWithAttributes:. Thus when some code calls
-  [[NSOpenGLPixelFormat alloc] initWithAttributres:attrs], our code will
-  instead be called. Inside our -QBS_initWithAttributes method are lines such
-  as:
+  [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs], our code will
+  instead be run. Inside our -QBS_initWithAttributes method are lines such as:
   
   result = [self QBS_initWithAttributes:attrs];
   
   This is _not_ a recursive call to itself; rather, it is a call to the
-  original -initWithAttributres: method (which will have been renamed by the
+  original -initWithAttributes: method (which will have been renamed by the
   time this code is executed).
   
   To create a quad-buffered OpenGL view, the view must be initialized with a
@@ -75,24 +75,24 @@ Code Overview:
 
 
 Fragility:
-  The Quad-Buffered Stereo plugin uses certain code that may break in the
+  The Quad-Buffered Stereo plug-in uses certain code that may break in the
   future. Particularly, there are a few cases of direct instance variable
   (ivar) access that require the OsiriX header files in the project to be
-  up-to-date. If they are not, the wrong ivars will be accessed at run-time.
+  up-to-date. If they are not, the wrong ivars will be accessed at runtime.
   The solution to this is to add accessor methods for these variables to the
   OsiriX source files, and then change the Quad-Buffered Stereo code to use
   these methods. Places in the code where direct ivar access occurs are marked
   with compiler warnings.
   
-  In some cases, code in the plugin is based on code from OsiriX. The
+  In some cases, code in the plug-in is based on code from OsiriX. The
   overridden stereo switching methods are based on code taken from the
   respective views. If the switching code in OsiriX changes, these overridden
   methods (which don't ever call the original method) may require updating.
   
-  The same is the case with the -initWithFrame: method in VTKView, and
+  This is also the case with the -initWithFrame: method in VTKView, and
   -QBS_flyThruQuickTimeExportStereo in FlyThruController.
   
-  It would be best to integrate the functionality of this plugin directly into
+  It would be best to integrate the functionality of this plug-in directly into
   OsiriX, so that future OsiriX changes will not break it.
 
 
@@ -140,7 +140,7 @@ Links:
 
 
 License:
-  The Quad-Buffered Stereo plugin is Copyright 2005-2006 Jonathon Mah, SAPAC,
+  The Quad-Buffered Stereo plug-in is Copyright 2005-2006 Jonathon Mah, SAPAC,
   and is licensed under the MIT License as follows:
   
   Copyright (c) 2005-2006 Jonathon Mah, SAPAC
