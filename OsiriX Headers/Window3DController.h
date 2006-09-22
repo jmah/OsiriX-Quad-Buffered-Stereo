@@ -16,8 +16,9 @@
 
 
 #import <Foundation/Foundation.h>
-@class ColorTransferView;
-@class OpacityTransferView;
+#import "ColorTransferView.h"
+#import "OpacityTransferView.h"
+#import "NSFullScreenWindow.h"
 
 
 #define DATABASEPATH				@"/DATABASE/"
@@ -90,5 +91,6 @@
 
 - (void) offFullScreen;
 - (IBAction) fullScreenMenu: (id) sender;
-
+- (long) movieFrames;
+- (void) setMovieFrame: (long) l;
 @end

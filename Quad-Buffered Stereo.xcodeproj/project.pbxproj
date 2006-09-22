@@ -25,39 +25,6 @@
 		0EEA6E11099091600039E1C1 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0EEA6E0F0990915F0039E1C1 /* Credits.rtf */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		014CEA420018CDE011CA2923 /* Debug */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "@executable_path/../Plug-ins";
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
-				WRAPPER_EXTENSION = plugin;
-				ZERO_LINK = NO;
-			};
-			name = Debug;
-		};
-		014CEA430018CDE011CA2923 /* Release */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXFileReference section */
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -1264,6 +1231,9 @@
 		0EEA6E01099080B20039E1C1 /* README-Development.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README-Development.txt"; sourceTree = "<group>"; };
 		0EEA6E100990915F0039E1C1 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		285192050AC438650013ACC7 /* ColorTransferView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorTransferView.h; sourceTree = "<group>"; };
+		285192070AC438750013ACC7 /* OpacityTransferView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpacityTransferView.h; sourceTree = "<group>"; };
+		285192090AC4388E0013ACC7 /* NSFullScreenWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFullScreenWindow.h; sourceTree = "<group>"; };
 		AB5D36050680E57E00F4007A /* Quad-Buffered Stereo.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Quad-Buffered Stereo.plugin"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1309,6 +1279,7 @@
 			isa = PBXGroup;
 			children = (
 				0EC884D10947B211006BFC6E /* Camera.h */,
+				285192050AC438650013ACC7 /* ColorTransferView.h */,
 				0EC884D20947B211006BFC6E /* DCMPix.h */,
 				0EC884D30947B211006BFC6E /* DCMView.h */,
 				0EC884D40947B211006BFC6E /* dicomFile.h */,
@@ -1317,7 +1288,9 @@
 				0EC655B90987164000EB7182 /* FlyThruController.h */,
 				0EC65627098717E700EB7182 /* Interpolation3D.h */,
 				0EC884D50947B211006BFC6E /* MPRView.h */,
+				285192090AC4388E0013ACC7 /* NSFullScreenWindow.h */,
 				0EC884D60947B211006BFC6E /* MyPoint.h */,
+				285192070AC438750013ACC7 /* OpacityTransferView.h */,
 				0EC884D70947B211006BFC6E /* PluginFilter.h */,
 				0EC884D80947B211006BFC6E /* Point3D.h */,
 				0EC88A4C0947B94F006BFC6E /* PreviewView.h */,
@@ -2590,28 +2563,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Duplicate_Prefix.pch;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "";
-				LIBRARY_STYLE = Bundle;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Duplicate;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = "Quad-Buffered Stereo";
@@ -2626,12 +2577,6 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "Quad-Buffered Stereo" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				014CEA420018CDE011CA2923 /* Debug */,
-				014CEA430018CDE011CA2923 /* Release */,
-			);
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,

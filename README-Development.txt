@@ -1,9 +1,9 @@
 ---------------------------  Quad-Buffered Stereo  ---------------------------
                                 OsiriX Plug-in
-   <http://www.jonathonmah.com/devetc/projects/osirix_quad-buffered_stereo>
+         <http://www.devetc.org/projects/osirix_quad-buffered_stereo>
                             README for Developers
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-04-16 by Jonathon Mah
+                   Last Updated: 2006-09-23 by Jonathon Mah
 
 
 
@@ -126,6 +126,8 @@ Fragility:
 
 
 Links:
+  Quad-Buffered Stereo Homepage
+    <http://www.devetc.org/projects/osirix_quad-buffered_stereo>
   Jonathon Mah
     <me@JonathonMah.com>
     <http://www.JonathonMah.com/>

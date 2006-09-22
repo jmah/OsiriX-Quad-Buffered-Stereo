@@ -136,6 +136,7 @@ typedef char* vtkPolyDataNormals;
 
 @class Camera;
 @class SRController;
+@class DICOMExport;
 
 @interface SRView : VTKView
 {
@@ -170,8 +171,18 @@ typedef char* vtkPolyDataNormals;
 	
 	long						numberOfFrames;
 	float						rotationValue;
+	long						rotationOrientation;
 	
-    vtkRenderer					*aRenderer;
+	vtkCallbackCommand			*cbStart;
+	
+	// DICOM export
+	IBOutlet NSWindow			*exportDCMWindow;
+	IBOutlet NSSlider			*dcmframesSlider;
+	IBOutlet NSMatrix			*dcmExportMode, *dcmrotation, *dcmorientation;
+	IBOutlet NSBox				*dcmBox;
+	IBOutlet NSTextField		*dcmSeriesName;
+	
+	vtkRenderer					*aRenderer;
     vtkCamera					*aCamera;
 
     vtkActor					*outlineRect;
@@ -182,6 +193,7 @@ typedef char* vtkPolyDataNormals;
 	
 	BOOL						noWaitDialog;
 	WaitRendering				*splash;
+	DICOMExport					*exportDCM;
 	
 	vtkImageResample			*isoResample;
 	vtkDecimatePro				*isoDeci[ 2];
@@ -206,19 +218,33 @@ typedef char* vtkPolyDataNormals;
 	NSDate						*startRenderingTime;
 	
 	NSMutableArray				*point3DActorArray;
-	//NSMutableArray			*point3DTextArray;
 	NSMutableArray				*point3DPositionsArray;
-	NSMutableArray				*point3DPositionsStringsArray;
 	NSMutableArray				*point3DRadiusArray;
 	NSMutableArray				*point3DColorsArray;
+	
+	NSMutableArray				*point3DDisplayPositionArray;
+	NSMutableArray				*point3DTextArray;
+	NSMutableArray				*point3DPositionsStringsArray;
+	NSMutableArray				*point3DTextSizesArray;
+	NSMutableArray				*point3DTextColorsArray;
+	
 	BOOL						display3DPoints;
 	IBOutlet NSPanel			*point3DInfoPanel;
 	IBOutlet NSTextField		*point3DPositionTextField;
-	IBOutlet NSSlider			*point3DRadiusSlider;
-	IBOutlet NSColorWell		*point3DColorWell;
+	IBOutlet NSButton			*point3DDisplayPositionButton;
+	IBOutlet NSSlider			*point3DRadiusSlider, *point3DTextSizeSlider;
+	IBOutlet NSColorWell		*point3DColorWell, *point3DTextColorWell;
 	IBOutlet NSButton			*point3DPropagateToAll, *point3DSetDefault;
 	IBOutlet SRController		*controller;
 	float						point3DDefaultRadius, point3DDefaultColorRed, point3DDefaultColorGreen, point3DDefaultColorBlue, point3DDefaultColorAlpha;
+	
+	BOOL						_dragInProgress;
+	NSTimer						*_mouseDownTimer;
+	NSImage						*destinationImage;
+	
+	NSPoint						_mouseLocStart;  // mouseDown start point
+	BOOL						_resizeFrame;
+	short						_tool;
 }
 
 -(unsigned char*) getRawPixels:(long*) width :(long*) height :(long*) spp :(long*) bpp :(BOOL) screenCapture :(BOOL) force8bits;
@@ -239,9 +265,13 @@ typedef char* vtkPolyDataNormals;
 -(IBAction) endQuicktimeSettings:(id) sender;
 -(IBAction) exportQuicktime :(id) sender;
 -(IBAction) endQuicktimeVRSettings:(id) sender;
+- (IBAction) setCurrentdcmExport:(id) sender;
+-(IBAction) endDCMExportSettings:(id) sender;
+-(void) exportDICOMFile:(id) sender;
 -(float) rotation;
 -(float) numberOfFrames;
 -(void) Azimuth:(float) z;
+-(void) Vertical:(float) a;
 -(NSImage*) nsimageQuicktime;
 -(NSImage*) nsimage:(BOOL) q;
 -(IBAction) export3DFileFormat :(id) sender;
@@ -281,5 +311,20 @@ typedef char* vtkPolyDataNormals;
 - (void) load3DPointsDefaultProperties;
 - (void) convert3Dto2Dpoint:(float*) pt3D :(float*) pt2D;
 
+// 3D Points annotations
+- (IBAction) IBSetSelected3DPointAnnotation: (id) sender;
+- (void) setAnnotationWithPosition:(int)displayPosition for3DPointAtIndex:(unsigned int) index;
+- (void) setAnnotation:(char*) annotation for3DPointAtIndex:(unsigned int) index;
+- (void) displayAnnotationFor3DPointAtIndex:(unsigned int) index;
+- (void) hideAnnotationFor3DPointAtIndex:(unsigned int) index;
+- (IBAction) IBSetSelected3DPointAnnotationColor: (id) sender;
+- (IBAction) IBSetSelected3DPointAnnotationSize: (id) sender;
+
 -(void) setCursorForView: (long) tool;
+
+//Dragging
+- (void) startDrag:(NSTimer*)theTimer;
+- (void)deleteMouseDownTimer;
+
+
 @end

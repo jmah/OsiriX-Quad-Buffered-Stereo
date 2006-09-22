@@ -16,6 +16,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+#import <Accelerate/Accelerate.h>
 
 #define USEVIMAGE
 
@@ -25,75 +26,113 @@
 
 @interface DCMPix: NSObject <NSCopying>
 {
-	BOOL				nonDICOM;
-	
-	BOOL				isBonjour;
-    NSManagedObject		*imageObj;
-	
+//SOURCES
 	NSString            *srcFile;
+	BOOL				isBonjour;
+	BOOL				nonDICOM;
+
+//BUFFERS	
+	NSArray				*pixArray;
+    NSManagedObject		*imageObj;	
     xNSImage			*image;
     short               *oImage;
 	float				*fImage, *fVolImage;
-	
-	NSPoint				subOffset;
-	float				*subtractedfImage;
-	
     char                *wImage;
-	long				frameNo;
-	long				serieNo;
-    
-    char                *baseAddr;
-    
-    long                height, width, rowBytes;
-    float				ww, wl;
-	long				imID, imTot;
-	float				fullww, fullwl;
-    float               sliceInterval, pixelSpacingX, pixelSpacingY, sliceLocation, sliceThickness, pixelRatio;
-    
+	
+//DICOM TAGS
+
+//	orientation
 	float				originX, originY, originZ;
 	float				orientation[ 9];
-	
-	BOOL				thickSlabMode;
+
+//	pixel representation
+	BOOL				fIsSigned;
+	short				bitsAllocated, spp;
+    float               slope, offset;
+
+//	image size
+    long                height, width, rowBytes;
+
+//	window level & width
+	float				savedWL, savedWW;
+
+//	planar configuration
+	long				fPlanarConf;
+    float               pixelSpacingX, pixelSpacingY, pixelRatio;
+
+//	photointerpretation
 	BOOL				isRGB;
 	BOOL				inverseVal;
-	long				fPlanarConf;
-	BOOL				fIsSigned, displaySUVValue;
+
+//--------------------------------------
+
+// DICOM params needed for SUV calculations
+	float				patientsWeight;
+	NSString			*repetitiontime;
+	NSString			*echotime;
+	NSString			*protocolName;
+	NSString			*viewPosition;
+	NSString			*patientPosition;
+	BOOL				hasSUV, SUVConverted;
+	NSString			*units, *decayCorrection;
+	float				decayFactor;
+	float				radionuclideTotalDose;
+	float				radionuclideTotalDoseCorrected;
+	NSDate				*acquisitionTime;
+	NSDate				*radiopharmaceuticalStartTime;
+	float				halflife;
+    float				philipsFactor;
+	BOOL				displaySUVValue;
+
+// DICOM params for Overlays - 0x6000 group	
+	int					oRows, oColumns, oType, oOrigin[ 2], oBits, oBitPosition;
+	unsigned char		*oData;
 	
-	BOOL				fixed8bitsWLWW;
-	
-    float               slope, offset, maxValueOfSeries;
-	
-	float				cineRate;
-	
+//	DSA-subtraction	
+	float				fImageBlackPoint;
+	float				fImageWhitePoint;
+	float				*subtractedfImage;
+	NSPoint				subPixOffset;
+	NSPoint				subMinMax;
+	float				subtractedfPercent;
+	float				subtractedfZero;
+	long				*subGammaFunction;
+
+//-------------------------------------------------------	
+	long				frameNo;
+	long				serieNo;
+	long				imID, imTot;    
+    char                *baseAddr;
+
+//convolution	
 	BOOL				convolution, updateToBeApplied;
 	short				kernelsize;
 	short				normalization;
 	short				kernel[25];
-	
-	float				savedWL, savedWW;
-	
+
+	float				cineRate;
+
+//slice
+    float               sliceInterval, sliceLocation, sliceThickness;
+//stack
 	short				stack;
 	short				stackMode, pixPos, stackDirection;
-	NSArray				*pixArray;
-	
-	volatile BOOL		checking;
-	
-	NSString			*echotime, *repetitiontime, *convertedDICOM, *protocolName;
-	
-	// ThickSlab
-	
+//thickslab
+    BOOL				thickSlabActivated;
 	ThickSlabController *thickSlab;
 	
-	BOOL				generated;
+    float				ww, wl;
+	float				fullww, fullwl;
+	BOOL				fixed8bitsWLWW;	
+    float               maxValueOfSeries, minValueOfSeries;
 	
 	
-	// DICOM params needed for SUV calculations
-	
-	BOOL				hasSUV, SUVConverted;
-	NSString			*units, *decayCorrection;
-	float				radionuclideTotalDose, patientsWeight;
-	NSDate				*acquisitionTime, *radiopharmaceuticalStartTime;
-	
+	NSString			*convertedDICOM;	
+	BOOL				generated;	
+	NSLock				*checking;	
+	float				*fFinalResult;
+	volatile long		wlwwThreads;
+	NSLock				*maxResultLock;
 }
 
 // Is it an RGB image (ARGB) or float image?
@@ -112,6 +151,16 @@
 // WL & WW
 - (float) ww;
 - (float) wl;
+-(float) fullww;
+-(float) fullwl;
+- (long) savedWL;
+- (long) savedWW;
+- (void) changeWLWW:(float)newWL :(float)newWW;
+-(void) computePixMinPixMax;
+- (float) maxValueOfSeries;
+- (void) setMaxValueOfSeries: (float) f;
+- (float) minValueOfSeries;
+- (void) setMinValueOfSeries: (float) f;
 
 // Compute ROI data
 - (void) computeROI:(ROI*) roi :(float *)mean :(float *)total :(float *)dev :(float *)min :(float *)max;
@@ -164,90 +213,152 @@
 // ID / FrameNo
 -(long) ID;
 - (void) setID :(long) i;
--(long) frameNo;
--(void) setFrameNo:(long) f;
-- (BOOL) thickSlabMode;
+- (long) frameNo;
+- (void) setFrameNo:(long) f;
+- (BOOL) thickSlabActivated;
 - (void) ConvertToBW:(long) mode;
 - (void) ConvertToRGB:(long) mode :(long) cwl :(long) cww;
-- (void) imageArithmeticSubtraction:(DCMPix*) sub;
 - (float) cineRate;
-- (void) setSubtractionOffset:(NSPoint) o;
-- (void) setSubtractedfImage :(float*) s;
--(float*) subtractImages :(float*) input :(float*) subfImage;
--(void) imageArithmeticMultiplication:(DCMPix*) sub;
+
+// drag-drop subtraction-multiplication between series
+- (void) imageArithmeticMultiplication:(DCMPix*) sub;
+- (float*) multiplyImages :(float*) input :(float*) subfImage;
+- (void) imageArithmeticSubtraction:(DCMPix*) sub;
+- (float*) arithmeticSubtractImages :(float*) input :(float*) subfImage;
+
+//DSA
+- (void) setSubSlidersPercent: (float) p gamma: (float) g zero: (float) z;
+- (NSPoint) subPixOffset;
+- (void) setSubPixOffset:(NSPoint) subOffset;
+- (NSPoint) subMinMax:(float*)input :(float*)subfImage;
+- (void) setSubtractedfImage:(float*)mask :(NSPoint)smm;
+- (float*) subtractImages:(float*)input :(float*)subfImage;
+
+- (void) copyFromOther:(DCMPix *) fromDcm;
+- (void) imageArithmeticMultiplication:(DCMPix*) sub;
 - (NSString*) repetitiontime;
 - (NSString*) echotime;
+- (void) setRepetitiontime:(NSString*)rep;
+- (void) setEchotime:(NSString*)echo;
 - (NSString*) protocolName;
+- (NSString*) viewPosition;
+- (NSString*) patientPosition;
 - (void) setRGB : (BOOL) val;
 - (void) setConvolutionKernel:(short*)val :(short) size :(short) norm;
 - (void) setArrayPix :(NSArray*) array :(short) i;
 - (BOOL) updateToApply;
 - (id) myinitEmpty;
 - (id) myinit:(NSString*) s :(long) pos :(long) tot :(float*) ptr :(long) f :(long) ss;
+/*		s == File Path
+		pos == Image ID (Number)
+		tot == number of IMages?
+		ptr == ptr to volume
+		f == frame number
+		ss == series number
+		hello == Bonjour
+		imageObj (iO) == image core data object
+
+- (id) initWithContentsOfFile:(NSString*) s 
+							imageID:(long) pos 
+							numberOfImages:(long) tot 
+							volume:(float*) ptr 
+							frameNumber:(long) f 
+							seriesNumber:(long) ss 
+							isBonjour:(BOOL) hello 
+					imageObj: (NSManagedObject*) iO;
+*/					
 - (id) myinit:(NSString*) s :(long) pos :(long) tot :(float*) ptr :(long) f :(long) ss isBonjour:(BOOL) hello imageObj: (NSManagedObject*) iO;
 - (id) initwithdata :(float*) im :(short) pixelSize :(long) xDim :(long) yDim :(float) xSpace :(float) ySpace :(float) oX :(float) oY :(float) oZ;
 - (id) initwithdata :(float*) im :(short) pixelSize :(long) xDim :(long) yDim :(float) xSpace :(float) ySpace :(float) oX :(float) oY :(float) oZ :(BOOL) volSize;
 - (xNSImage*) computeWImage: (BOOL) smallIcon :(float)newWW :(float)newWL;
-- (void) changeWLWW:(float)newWL :(float)newWW;
+- (NSImage*) image;
 - (xNSImage*) getImage;
 - (char*) baseAddr;
 - (void) setBaseAddr :( char*) ptr;
+- (void) orientation:(float*) c;
+- (void) setOrientation:(float*) c;
 - (void) dealloc;
 - (short*) oImage;
-//- (void) killImage;
+- (void) kill8bitsImage;
 - (void) checkImageAvailble:(float)newWW :(float)newWL;
 -(long) rowBytes;
 -(void) setRowBytes:(long) rb;
--(float) fullww;
--(float) fullwl;
+
+//- (BOOL)loadFileDCMFramework;//Refactoring of loadDICOMDCMFramework
+- (BOOL)loadDICOMDCMFramework;
+- (BOOL) loadDICOMPapyrus;
+- (void) CheckLoadIn;
+- (void) CheckLoad;
+//-(void) CheckLoad;
+
+
+
 -(float) slope;
 -(float) offset;
 -(long) serieNo;
 -(long) Tot;
 -(void) setTot: (long) tot;
--(void) CheckLoad;
 -(void) setFusion:(short) m :(short) s :(short) direction;
 -(short) stack;
+-(short) stackMode;
+- (long) rowBytes;
+- (void) setRowBytes:(long) rb;
+- (float) fullww;
+- (float) fullwl;
+- (float) slope;
+- (float) offset;
+- (long) serieNo;
+- (long) Tot;
+- (void) setTot: (long) tot;
+- (void) setFusion:(short) m :(short) s :(short) direction;
+- (short) stack;
+- (void)setSourceFile:(NSString*)s;
 -(NSString*) sourceFile;
 -(void) setUpdateToApply;
 -(void) revert;
--(void) computePixMinPixMax;
+- (NSString*) sourceFile;
+- (void) setUpdateToApply;
+- (void) revert;
+- (void) computePixMinPixMax;
 - (long) savedWL;
 - (long) savedWW;
--(void) setfImage:(float*) ptr;
+- (void) setfImage:(float*) ptr;
 - (void) setThickSlabController:( ThickSlabController*) ts;
--(void) setFixed8bitsWLWW:(BOOL) f;
--(BOOL) generated;
-- (float) maxValueOfSeries;
-- (void) setMaxValueOfSeries: (float) f;
+- (void) setFixed8bitsWLWW:(BOOL) f;
+- (BOOL) generated;
 
-// Accessor methods needed for SUV calculations
-
--(float) patientsWeight;
--(void) setPatientsWeight : (float) v;
-
--(float) radionuclideTotalDose;
--(void) setRadionuclideTotalDose : (float) v;
-
--(NSDate*) acquisitionTime;
--(void) setAcquisitionTime : (NSDate*) d;
-
--(NSDate*) radiopharmaceuticalStartTime;
--(void) setRadiopharmaceuticalStartTime : (NSDate*) d;
-
--(void) setSUVConverted : (BOOL) v;
-- (BOOL) SUVConverted;
-
-- (NSString*) units;
-- (NSString*) decayCorrection;
-- (void) setDecayCorrection : (NSString*) s;
 //Database links
 - (NSManagedObject *)imageObj;
 - (NSManagedObject *)seriesObj;
+
+// Accessor methods needed for SUV calculations
+- (float) philipsFactor;
+- (float) patientsWeight;
+- (void) setPatientsWeight : (float) v;
+- (float) halflife;
+- (void) setHalflife : (float) v;
+- (float) radionuclideTotalDose;
+- (void) setRadionuclideTotalDose : (float) v;
+- (float) radionuclideTotalDoseCorrected;
+- (void) setRadionuclideTotalDoseCorrected : (float) v;
+- (NSDate*) acquisitionTime;
+- (void) setAcquisitionTime : (NSDate*) d;
+- (NSDate*) radiopharmaceuticalStartTime;
+- (void) setRadiopharmaceuticalStartTime : (NSDate*) d;
+- (void) setSUVConverted : (BOOL) v;
+- (BOOL) SUVConverted;
+- (float) decayFactor;
+- (NSString*) units;
+- (NSString*) decayCorrection;
+- (void) setDecayCorrection : (NSString*) s;
 - (void) checkSUV;
 - (BOOL) hasSUV;
 - (BOOL) displaySUVValue;
 - (void) setDisplaySUVValue : (BOOL) v;
 - (void) copySUVfrom: (DCMPix*) from;
 - (NSString *)setUnits: (NSString *) s;
+- (float) getPixelValueX: (long) x Y:(long) y;
+
+- (NSString *)srcFile;
+
 @end

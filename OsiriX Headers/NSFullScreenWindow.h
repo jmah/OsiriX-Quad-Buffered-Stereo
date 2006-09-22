@@ -16,23 +16,11 @@
 
 
 #import <Foundation/Foundation.h>
-#import <QuickTime/QuickTime.h>
+#import <Cocoa/Cocoa.h>
 
-@interface QuicktimeExport : NSObject {
+@interface NSFullScreenWindow : NSWindow {
 
-	id						object;
-	SEL						selector;
-	long					numberOfFrames;
-	unsigned long			codec;
-	long					quality;
-	
-	IBOutlet NSView			*view;
-	IBOutlet NSPopUpButton	*type;
 }
+- (BOOL)canBecomeKeyWindow;
 
-- (id) initWithSelector:(id) o :(SEL) s :(long) f;
-- (void) setCodec:(unsigned long) codec :(long) quality;
-- (NSString*) generateMovie :(BOOL) openIt :(BOOL) produceFiles :(NSString*) name;
-- (NSString*) createMovieQTKit:(BOOL) openIt :(BOOL) produceFiles :(NSString*) name;
 @end
-

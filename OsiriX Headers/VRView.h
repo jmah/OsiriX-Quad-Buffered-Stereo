@@ -143,6 +143,9 @@ typedef char* vtkMyCallbackVR;
 
 @interface VRView : VTKView <Schedulable>
 {
+	NSTimer						*autoRotate;
+	BOOL						rotate;
+
 	int							projectionMode;
     NSMutableArray				*blendingPixList;
     DCMPix						*blendingFirstObject;
@@ -169,6 +172,7 @@ typedef char* vtkMyCallbackVR;
 	IBOutlet NSWindow       *export3DWindow;
 	IBOutlet NSSlider		*framesSlider;
 	IBOutlet NSMatrix		*quality, *rotation, *orientation;
+	IBOutlet NSTextField	*pixelInformation;
 
 	IBOutlet NSWindow			*exportDCMWindow;
 	IBOutlet NSSlider			*dcmframesSlider;
@@ -186,14 +190,17 @@ typedef char* vtkMyCallbackVR;
 	long					numberOfFrames;
 	BOOL					bestRenderingMode;
 	float					rotationValue, factor;
-	long					rotationOrientation;
+	long					rotationOrientation, renderingMode;
 	
 	NSTimer					*mouseModifiers;
 	NSArray					*currentOpacityArray;
     NSMutableArray			*pixList;
     DCMPix					*firstObject;
     float					*data;
-
+	
+	float					valueFactor, blendingValueFactor;
+	float					OFFSET16, blendingOFFSET16;
+	
 	unsigned char			*dataFRGB;
 	char					*data8;
 	vImage_Buffer			srcf, dst8;
@@ -219,7 +226,7 @@ typedef char* vtkMyCallbackVR;
 	vtkPlaneWidget				*planeWidget;
 	vtkOrientationMarkerWidget	*orientationWidget;
 	vtkBoxWidget				*croppingBox;
-	
+	double						initialCroppingBoxBounds[6];
 	// MAPPERS
 	
 	vtkFixedPointVolumeRayCastMapper			*volumeMapper;
@@ -252,6 +259,7 @@ typedef char* vtkMyCallbackVR;
 	vtkPolyDataMapper2D			*Line2D;
 	vtkActor2D					*Line2DActor;
 	vtkTextActor				*Line2DText;
+	vtkCallbackCommand			*cbStart;
 	
 	BOOL						clamping;
 	
@@ -268,6 +276,16 @@ typedef char* vtkMyCallbackVR;
 	IBOutlet NSButton			*point3DPropagateToAll, *point3DSetDefault;
 	IBOutlet VRController		*controller;
 	float						point3DDefaultRadius, point3DDefaultColorRed, point3DDefaultColorGreen, point3DDefaultColorBlue, point3DDefaultColorAlpha;
+	
+	BOOL						_dragInProgress;
+	NSTimer						*_mouseDownTimer;
+	NSImage						*destinationImage;
+	
+	NSPoint						_mouseLocStart;  // mouseDown start point
+	BOOL						_resizeFrame;
+	short						_tool;
+	
+	float						_startWW, _startWL, _startMin, _startMax;
 }
 
 + (BOOL) getCroppingBox:(double*) a :(vtkVolume *) volume :(vtkBoxWidget*) croppingBox;
@@ -276,6 +294,7 @@ typedef char* vtkMyCallbackVR;
 - (void) renderImageWithBestQuality: (BOOL) best waitDialog: (BOOL) wait;
 - (void) endRenderImageWithBestQuality;
 
+- (void)changeColorWith:(NSColor*) color;
 - (void) exportDICOMFile:(id) sender;
 -(unsigned char*) getRawPixels:(long*) width :(long*) height :(long*) spp :(long*) bpp :(BOOL) screenCapture :(BOOL) force8bits;
 -(void) set3DStateDictionary:(NSDictionary*) dict;
@@ -323,7 +342,6 @@ typedef char* vtkMyCallbackVR;
 - (IBAction) resetImage:(id) sender;
 -(void) saView:(id) sender;
 - (IBAction)setRenderMode:(id)sender;
-- (void) setMode: (long) modeID;
 - (void) setBlendingMode: (long) modeID;
 -(NSImage*) nsimageQuicktime:(BOOL) renderingMode;
 - (void) setCamera: (Camera*) cam;
@@ -335,6 +353,7 @@ typedef char* vtkMyCallbackVR;
 - (void) getOrientation: (float*) o;
 -(void) bestRendering:(id) sender;
 - (void) setMode: (long) modeID;
+- (long) mode;
 -(void)resizeWindowToScale:(float)resizeScale;
 - (IBAction)resizeWindow:(id)sender;
 - (float) getResolution;
@@ -343,6 +362,9 @@ typedef char* vtkMyCallbackVR;
 - (void) setViewportResizable: (BOOL) boo;
 
 // 3D Points
+- (BOOL) get3DPixelUnder2DPositionX:(float) x Y:(float) y pixel: (long*) pix position:(float*) position value:(float*) val;
+- (BOOL) get3DPixelUnder2DPositionX:(float) x Y:(float) y pixel: (long*) pix position:(float*) position value:(float*) val maxOpacity: (float) maxOpacity minValue: (float) minValue;
+
 - (void) add3DPoint: (double) x : (double) y : (double) z : (float) radius : (float) r : (float) g : (float) b;
 - (void) add3DPoint: (double) x : (double) y : (double) z;
 - (void) add3DPointActor: (vtkActor*) actor;
@@ -369,9 +391,11 @@ typedef char* vtkMyCallbackVR;
 - (void) convert3Dto2Dpoint:(float*) pt3D :(float*) pt2D;
 - (IBAction) setCurrentdcmExport:(id) sender;
 - (IBAction) switchToSeriesRadio:(id) sender;
-
+- (float) offset;
+- (float) valueFactor;
 - (void) setViewportResizable: (BOOL) boo;
 
+- (void) setRotate: (BOOL) r;
 - (float) factor;
 
 // export
@@ -382,4 +406,9 @@ typedef char* vtkMyCallbackVR;
 
 // cursors
 -(void) setCursorForView: (long) tool;
+
+//Dragging
+- (void) startDrag:(NSTimer*)theTimer;
+- (void)deleteMouseDownTimer;
+
 @end

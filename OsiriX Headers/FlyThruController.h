@@ -55,6 +55,7 @@
 	NSTimeInterval			lastMovieTime;
 	int						curMovieIndex;
 	
+	IBOutlet NSButton		*exportButtonOption;
 }
 
 - (void)setWindow3DController:(Window3DController*) w3Dc;
@@ -82,5 +83,8 @@
 - (IBAction) flyThruLoop :(id) sender;
 - (void) updateThumbnails;
 - (void) flyThruTag:(int) x;
+
+// specific optional button for Endoscopy
+- (NSButton*) exportButtonOption;
 
 @end

@@ -22,6 +22,14 @@
 @end
 
 
+// Declare private methods to suppress warnings
+@interface Window3DController (QBSSuppressWarnings)
+
+- (NSArray *)fileList;
+
+@end
+
+
 @implementation FlyThruController (QuadBufferedStereo)
 
 #pragma mark Initialization and Deallocation
@@ -100,7 +108,6 @@
 	                                                                    :@selector(imageForFrame:maxFrame:)
 	                                                                    :[FT numberOfFrames]];
 	[leftMov generateMovie:YES
-	                      :[[[self window3DController] view] bounds]
 	                      :NO
 	                      :leftName];
 	[leftMov release];
@@ -119,7 +126,6 @@
 	                                                                     :@selector(imageForFrame:maxFrame:)
 	                                                                     :[FT numberOfFrames]];
 	[rightMov generateMovie:YES
-	                       :[[[self window3DController] view] bounds]
 	                       :NO
 	                       :rightName];
 	[rightMov release];

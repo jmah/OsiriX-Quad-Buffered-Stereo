@@ -16,6 +16,8 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
+
+
 @interface DicomFile: NSObject
 {
     NSString            *name;
@@ -32,7 +34,6 @@
 	NSString			*patientID;
 	NSString			*studyIDs;
 	NSString			*seriesNo;
-	NSString			*sliceLocation;
     NSCalendarDate		*date;
 	
 	long				width, height;
@@ -40,22 +41,44 @@
 	long				NoOfSeries;
     
 	NSMutableDictionary *dicomElements;
+	
 }
 // file functions
 + (BOOL) isTiffFile:(NSString *) file;
 + (BOOL) isFVTiffFile:(NSString *) file;
 + (BOOL) isDICOMFile:(NSString *) file;
++ (BOOL) isXMLDescriptedFile:(NSString *) file;
++ (BOOL) isXMLDescriptorFile:(NSString *) file;
+
 + (void) setDefaults;
++ (void) resetDefaults;
++ (NSString*) NSreplaceBadCharacter: (NSString*) str;
++ (char *) replaceBadCharacter:(char *) str encoding: (NSStringEncoding) encoding;
 
 - (long) NoOfFrames;
 - (long) getWidth;
 - (long) getHeight;
 - (long) NoOfSeries;
 - (id) init:(NSString*) f;
+- (id) init:(NSString*) f DICOMOnly:(BOOL) DICOMOnly;
+- (id) initRandom;
 - (NSString*) patientUID;
 - (NSMutableDictionary *)dicomElements;
 - (id)elementForKey:(id)key;
 - (short)getPluginFile;
 - (void)extractSeriesStudyImageNumbersFromFileName:(NSString *)tempString;
--(short) decodeDICOMFileWithDCMFramework;
+- (short) decodeDICOMFileWithDCMFramework;
+
+- (id) initWithXMLDescriptor: (NSString*)pathToXMLDescriptor path:(NSString*) f;
+-(short) getDicomFile;
+- (BOOL)autoFillComments;
+- (BOOL)splitMultiEchoMR;
+- (BOOL)useSeriesDescription;
+- (BOOL) noLocalizer;
+- (BOOL)combineProjectionSeries;
+- (BOOL)checkForLAVIM;
+- (int)commentsGroup ;
+- (int)commentsElement ;
 @end
+
+
