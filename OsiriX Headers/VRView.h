@@ -141,9 +141,11 @@ typedef char* vtkMyCallbackVR;
 @class Camera;
 @class VRController;
 
+#import "CLUTOpacityView.h"
+
 @interface VRView : VTKView <Schedulable>
 {
-	NSTimer						*autoRotate;
+	NSTimer						*autoRotate, *startAutoRotate;
 	BOOL						rotate;
 
 	int							projectionMode;
@@ -169,10 +171,10 @@ typedef char* vtkMyCallbackVR;
 	BOOL						needToFlip, blendingNeedToFlip, firstTime;
 //	vtkImageFlip				*flip, *blendingFlip;
 	
-	IBOutlet NSWindow       *export3DWindow;
-	IBOutlet NSSlider		*framesSlider;
-	IBOutlet NSMatrix		*quality, *rotation, *orientation;
-	IBOutlet NSTextField	*pixelInformation;
+	IBOutlet NSWindow			*export3DWindow;
+	IBOutlet NSSlider			*framesSlider;
+	IBOutlet NSMatrix			*quality, *rotation, *orientation;
+	IBOutlet NSTextField		*pixelInformation;
 
 	IBOutlet NSWindow			*exportDCMWindow;
 	IBOutlet NSSlider			*dcmframesSlider;
@@ -186,6 +188,9 @@ typedef char* vtkMyCallbackVR;
 	IBOutlet NSMatrix		*projection;
 	
 	IBOutlet NSMatrix		*scissorStateMatrix;
+	IBOutlet NSColorWell	*backgroundColor;
+	
+	IBOutlet NSObjectController	*shadingController;
 	
 	long					numberOfFrames;
 	BOOL					bestRenderingMode;
@@ -281,11 +286,25 @@ typedef char* vtkMyCallbackVR;
 	NSTimer						*_mouseDownTimer;
 	NSImage						*destinationImage;
 	
-	NSPoint						_mouseLocStart;  // mouseDown start point
+	NSPoint						_mouseLocStart, _previousLoc;  // mouseDown start point
 	BOOL						_resizeFrame;
 	short						_tool;
 	
 	float						_startWW, _startWL, _startMin, _startMax;
+	
+	NSRect						savedViewSizeFrame;
+	
+	float						firstPixel, secondPixel;
+	
+	NSDictionary				*_hotKeyDictionary;
+	
+	NSLock						*deleteRegion;
+	
+	IBOutlet CLUTOpacityView	*clutOpacityView;
+	BOOL						advancedCLUT;
+	NSData						*appliedCurves;
+	BOOL						appliedResolution;
+	BOOL						gDataValuesChanged;
 }
 
 + (BOOL) getCroppingBox:(double*) a :(vtkVolume *) volume :(vtkBoxWidget*) croppingBox;
@@ -293,8 +312,10 @@ typedef char* vtkMyCallbackVR;
 
 - (void) renderImageWithBestQuality: (BOOL) best waitDialog: (BOOL) wait;
 - (void) endRenderImageWithBestQuality;
-
-- (void)changeColorWith:(NSColor*) color;
+- (void) resetAutorotate:(id) sender;
+- (void) setEngine: (long) engineID showWait:(BOOL) showWait;
+- (IBAction)changeColorWith:(NSColor*) color;
+- (IBAction)changeColor:(id)sender;
 - (void) exportDICOMFile:(id) sender;
 -(unsigned char*) getRawPixels:(long*) width :(long*) height :(long*) spp :(long*) bpp :(BOOL) screenCapture :(BOOL) force8bits;
 -(void) set3DStateDictionary:(NSDictionary*) dict;
@@ -354,8 +375,6 @@ typedef char* vtkMyCallbackVR;
 -(void) bestRendering:(id) sender;
 - (void) setMode: (long) modeID;
 - (long) mode;
--(void)resizeWindowToScale:(float)resizeScale;
-- (IBAction)resizeWindow:(id)sender;
 - (float) getResolution;
 
 - (BOOL) isViewportResizable;
@@ -394,9 +413,17 @@ typedef char* vtkMyCallbackVR;
 - (float) offset;
 - (float) valueFactor;
 - (void) setViewportResizable: (BOOL) boo;
-
+- (void) squareView:(id) sender;
+- (void) computeValueFactor;
 - (void) setRotate: (BOOL) r;
 - (float) factor;
+
+-(void) setViewSizeToMatrix3DExport;
+-(void) restoreViewSizeAfterMatrix3DExport;
+-(void) axView:(id) sender;
+-(void) coView:(id) sender;
+-(void) saViewOpposite:(id) sender;
+
 
 // export
 - (void) sendMail:(id) sender;
@@ -410,5 +437,11 @@ typedef char* vtkMyCallbackVR;
 //Dragging
 - (void) startDrag:(NSTimer*)theTimer;
 - (void)deleteMouseDownTimer;
+
+-(BOOL)actionForHotKey:(NSString *)hotKey;
+- (void)setAdvancedCLUT:(NSMutableDictionary*)clut lowResolution:(BOOL)lowRes;
+- (void)setAdvancedCLUTWithName:(NSString*)name;
+- (VRController*)controller;
+- (BOOL)isRGB;
 
 @end

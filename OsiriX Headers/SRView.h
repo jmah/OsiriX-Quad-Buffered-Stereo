@@ -166,6 +166,9 @@ typedef char* vtkPolyDataNormals;
 	
 	IBOutlet NSWindow			*export3DVRWindow;
 	IBOutlet NSMatrix			*VRFrames;
+	
+	IBOutlet NSColorWell		*backgroundColor;
+	
 	double						camPosition[ 3];
 	double						camFocal[ 3];
 	
@@ -245,6 +248,8 @@ typedef char* vtkPolyDataNormals;
 	NSPoint						_mouseLocStart;  // mouseDown start point
 	BOOL						_resizeFrame;
 	short						_tool;
+	
+	NSRect						savedViewSizeFrame;
 }
 
 -(unsigned char*) getRawPixels:(long*) width :(long*) height :(long*) spp :(long*) bpp :(BOOL) screenCapture :(BOOL) force8bits;
@@ -282,7 +287,10 @@ typedef char* vtkPolyDataNormals;
 - (void) computeOrientationText;
 - (void) getOrientation: (float*) o;
 -(void) saView:(id) sender;
-
+-(void) axView:(id) sender;
+-(void) coView:(id) sender;
+-(void) saViewOpposite:(id) sender;
+- (IBAction)changeColor:(id)sender;
 -(IBAction) switchProjection:(id) sender;
 
 // 3D Points
@@ -325,6 +333,6 @@ typedef char* vtkPolyDataNormals;
 //Dragging
 - (void) startDrag:(NSTimer*)theTimer;
 - (void)deleteMouseDownTimer;
-
+-(void) squareView:(id) sender;
 
 @end

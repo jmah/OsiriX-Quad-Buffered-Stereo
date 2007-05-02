@@ -15,9 +15,9 @@
 
 
 #import <AppKit/AppKit.h>
-#import "vtkCocoaGLView.h"
 
 #ifdef __cplusplus
+#import "vtkCocoaGLView.h"
 #import "vtkCocoaWindow.h"
 #define id Id
 #include "vtkRenderer.h"

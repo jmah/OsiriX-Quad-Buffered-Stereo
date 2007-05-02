@@ -3,7 +3,7 @@
          <http://www.devetc.org/projects/osirix_quad-buffered_stereo>
                                     README
                         Created: 2006-01-31 by Jonathon Mah
-                   Last Updated: 2006-09-23 by Jonathon Mah
+                   Last Updated: 2007-05-01 by Jonathon Mah
 
 
 
@@ -100,6 +100,9 @@ Links:
 
 
 Version History:
+1.0.2 (2007-05-01)
+  - Updated to work with OsiriX 2.7.5
+
 1.0.1 (2006-09-23)
   - Updated to work with OsiriX 2.5.1
 
@@ -114,7 +117,7 @@ License:
   The Quad-Buffered Stereo plug-in is Copyright 2005-2006 Jonathon Mah, SAPAC,
   and is licensed under the MIT License as follows:
   
-  Copyright (c) 2005-2006 Jonathon Mah, SAPAC
+  Copyright (c) 2005-2007 Jonathon Mah, SAPAC
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to
